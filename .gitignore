@@ -16,6 +16,7 @@ cat .gitignore
 SV_Game.pro.user
 SV_Server.pro.user
 
+TODO.txt
 Log.txt
 .qmake.stash
 Makefile
