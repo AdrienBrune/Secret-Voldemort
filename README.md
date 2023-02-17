@@ -3,10 +3,10 @@
 <ul>
 <li>Creator : BRUNE Adrien</li>
 <li>Version : 1.0.0</li>
-<li>Date : 29/04/2021</li>
+<li>Date : 17/02/2023</li>
 </ul>
 
-<img src="./SECRET_VOLDEMORT_GAME/Developpement/ressources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">
+<img src="./SV_GAME/Src/Resources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">
 
 ## Game
 
@@ -22,11 +22,11 @@ Official Secret Hitler rules : https://www.secrethitler.com/assets/Secret_Hitler
 Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGirl
 
 ## Preview
-<img src="./Preview/img1.png" alt="Logo" width="800" height="400">
-<img src="./Preview/img2.png" alt="Logo" width="800" height="400">
-<img src="./Preview/img3.png" alt="Logo" width="800" height="400">
-<img src="./Preview/img4.png" alt="Logo" width="800" height="400">
-<img src="./Preview/img5.png" alt="Logo" width="800" height="400">
+<img src="./Preview/img1.png" alt="Preview to add" width="800" height="400">
+<img src="./Preview/img2.png" alt="Preview to add" width="800" height="400">
+<img src="./Preview/img3.png" alt="Preview to add" width="800" height="400">
+<img src="./Preview/img4.png" alt="Preview to add" width="800" height="400">
+<img src="./Preview/img5.png" alt="Preview to add" width="800" height="400">
 
 ## Technical point
 * Only one serveur is needed to play.
