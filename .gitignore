@@ -17,7 +17,7 @@ SV_Game.pro.user
 SV_Game.pro.user
 
 Log
-*.qmake.stash
+.qmake.stash
 Makefile
 *.Debug
 *.Release
