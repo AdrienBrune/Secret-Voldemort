@@ -22,11 +22,10 @@ Official Secret Hitler rules : https://www.secrethitler.com/assets/Secret_Hitler
 Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGirl
 
 ## Preview
-<img src="./Preview/img1.png" alt="Preview to add" width="800" height="400">
-<img src="./Preview/img2.png" alt="Preview to add" width="800" height="400">
-<img src="./Preview/img3.png" alt="Preview to add" width="800" height="400">
-<img src="./Preview/img4.png" alt="Preview to add" width="800" height="400">
-<img src="./Preview/img5.png" alt="Preview to add" width="800" height="400">
+<img src="./Preview/Preview_1.png" alt="Preview to add" width="700" height="400">
+<img src="./Preview/Preview_2.png" alt="Preview to add" width="700" height="400">
+<img src="./Preview/Preview_3.png" alt="Preview to add" width="700" height="400">
+<img src="./Preview/Preview_4.png" alt="Preview to add" width="700" height="400">
 
 ## Technical point
 * Only one serveur is needed to play.
