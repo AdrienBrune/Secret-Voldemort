@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>C_GuiInterface</class>
+ <widget class="QWidget" name="C_GuiInterface">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1066</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="10,48,14">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="layoutTop" stretch="6,2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="W_MessageDisplayer" name="MessageDisplayer" native="true"/>
+     </item>
+     <item>
+      <widget class="W_ElectionTracker" name="ElectionTracker" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutMiddle" stretch="30,65">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="W_PlayersManagement" name="PlayersManagement" native="true"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="layout__board">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>40</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="layout_top" stretch="3,12">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="layout_stack">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="W_Stack" name="Stack" native="true"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="layout_phenixOrder">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="W_PhenixOrderBoard" name="PhenixOrderBoard" native="true"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="layout_board_deathEater">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="W_DeathEaterBoard" name="DeathEaterBoard" native="true"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutBottom" stretch="12,2,28">
+     <property name="spacing">
+      <number>100</number>
+     </property>
+     <item>
+      <widget class="W_Easel" name="Easel" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="W_GameTracker" name="GameTracker" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>W_Easel</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_easel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_GameTracker</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_gametracker.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_PlayersManagement</class>
+   <extends>QWidget</extends>
+   <header>Widgets/w_playersmanagement.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_MessageDisplayer</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_messagedisplayer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_ElectionTracker</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_electiontracker.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_Stack</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_stack.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_PhenixOrderBoard</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_lawboard.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>W_DeathEaterBoard</class>
+   <extends>QWidget</extends>
+   <header>Widgets/Components/w_lawboard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

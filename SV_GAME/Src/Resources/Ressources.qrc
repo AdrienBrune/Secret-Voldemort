@@ -1,0 +1,52 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>easel_Director.png</file>
+        <file>easel_Minister.png</file>
+        <file>background.png</file>
+        <file>board_deathEater_56.png</file>
+        <file>board_deathEater_78.png</file>
+        <file>board_deathEater_910.png</file>
+        <file>board_phenixOrder.png</file>
+        <file>custom_cursor.png</file>
+        <file>Role_Albus Dumbledor.png</file>
+        <file>Role_Beatrix Lestrange.png</file>
+        <file>Role_Drago Malfoy.png</file>
+        <file>Role_Harry Potter.png</file>
+        <file>Role_Hermione Granger.png</file>
+        <file>Role_Lord Voldemort.png</file>
+        <file>Role_Lucius Malfoy.png</file>
+        <file>Role_Neville Londubat.png</file>
+        <file>Role_Ron Weasley.png</file>
+        <file>Role_Sirius Black.png</file>
+        <file>Team_Beatrix Lestrange.png</file>
+        <file>Team_Drago Malfoy.png</file>
+        <file>Team_Lord Voldemort.png</file>
+        <file>Team_Lucius Malfoy.png</file>
+        <file>Law_DeathEater.png</file>
+        <file>Law_PhenixOrder.png</file>
+        <file>Secret_Voldemort_Cover.png</file>
+        <file>Law.png</file>
+        <file>Vote_Lumos.png</file>
+        <file>Vote_Nox.png</file>
+        <file>Faction_DeathEater.png</file>
+        <file>Faction_PhenixOrder.png</file>
+        <file>Power_Assassinat.png</file>
+        <file>Power_Coup d'état.png</file>
+        <file>Power_Espionnage.png</file>
+        <file>Power_Clairvoyance.png</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>font_germania.ttf</file>
+        <file>font_harrypotter.ttf</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>Music_Entrance.wav</file>
+        <file>Music_GameFinished.wav</file>
+        <file>Sound_Clicked.wav</file>
+        <file>Sound_Draw.wav</file>
+        <file>Sound_Kill.mp3</file>
+        <file>Sound_Hover.wav</file>
+        <file>Sound_CardSelection.wav</file>
+        <file>Sound_Notify.wav</file>
+    </qresource>
+</RCC>
