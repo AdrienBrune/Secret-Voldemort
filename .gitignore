@@ -3,15 +3,15 @@ cat .gitignore
 **/Divers
 **/Debug
 
-**/Release/MacOS/*.h
-**/Release/MacOS/*.cpp
-**/Release/MacOS/*.o
-**/Release/release
+**/Release/MacOS/**.h
+**/Release/MacOS/**.cpp
+**/Release/MacOS/**.o
+**/Release/MacOS/release
 
-**/Release/Windows/*.h
-**/Release/Windows/*.cpp
-**/Release/Windows/*.o
-**/Release/release
+**/Release/Windows/**.h
+**/Release/Windows/**.cpp
+**/Release/Windows/**.o
+**/Release/Windows/release
 
 SV_Game.pro.user
 SV_Game.pro.user
