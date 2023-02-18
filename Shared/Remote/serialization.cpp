@@ -24,7 +24,7 @@ QDebug operator<<(QDebug dbg, const C_Player &instance)
 
 QDataStream & operator<<(QDataStream & stream, const C_Player &player)
 {
-    return stream << player.getName() << player.getRole() << player.getStatus() << player.getPosition() << player.getFlagVote();
+    return stream << player.getName() << player.getRole() << player.getStatus() << player.getPosition() << player.getFlagVote() << player.getFlagFocus();
 }
 
 QDataStream & operator>>(QDataStream & stream, C_Player &instance)
@@ -33,14 +33,15 @@ QDataStream & operator>>(QDataStream & stream, C_Player &instance)
     C_Player::E_ROLE role;
     C_Player::E_STATUS status;
     C_Player::E_POSITION position;
-    bool flag;
+    bool flag, focus;
 
-    stream >> name >> role >> status >> position >> flag;
+    stream >> name >> role >> status >> position >> flag >> focus;
     instance.setName(name);
     instance.setRole(role);
     instance.setStatus(status);
     instance.setPosition(position);
     instance.setFlagVote(flag);
+    instance.setFlagFocus(focus);
 
     return stream;
 }

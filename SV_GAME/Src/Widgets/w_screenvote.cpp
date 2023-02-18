@@ -42,10 +42,10 @@ void W_ScreenVote::paintEvent(QPaintEvent *)
     if(!C_PlayersHandler::getInstance())
         return;
 
-    C_Player *director = C_PlayersHandler::getInstance()->getDirector();
+    C_Player *playerFocus = C_PlayersHandler::getInstance()->getPlayerFocus();
 
     QRect boundingArea(20, 0, width()-40, height()/4-20);
-    QString string = QString("Voter pour élire %1 Directeur de Poudlard").arg(director ? director->getName() : "le joueur");
+    QString string = QString("Voter pour élire %1 Directeur de Poudlard").arg(playerFocus ? playerFocus->getName() : "le joueur");
     painter.setFont(C_AutoScaleFont("Germania", string, boundingArea));
     painter.setPen(QPen(QColor(250, 250, 250), 1));
     painter.drawLine(QLine(0, height()/4, width(), height()/4));

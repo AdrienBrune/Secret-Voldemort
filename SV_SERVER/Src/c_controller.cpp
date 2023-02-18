@@ -197,6 +197,7 @@ void C_Controller::EVENT_DirectorDiscarded(C_Player *, const QByteArray &data)
     }
     mStack->getStack().takeLast().getFaction() == C_LawCard::E_FACTION::deathEater ? lawBoard = mDeathEaterBoard : lawBoard = mPhenixOrderBoard;
     lawBoard->addCardOnBoard();
+    mElectionTracker->setCounter(0);
     addNextState(new C_NextStep(E_ST::st_lawVoted));
 
     if(lawBoard->getCardsOnBoard() >= lawBoard->getLawSpotNumber())

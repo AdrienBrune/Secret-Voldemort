@@ -88,6 +88,9 @@ void C_Controller::Event_DirectorSelection(QByteArray data)
 {
     qDebug() << "Event_DirectorSelection : " << data.size() << data;
 
+    /* Hide potential opened screens */
+    mView->quitAllScreen();
+
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
