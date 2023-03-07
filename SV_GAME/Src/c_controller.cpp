@@ -398,6 +398,9 @@ void C_Controller::onConnected()
 
     C_SoundHandler::getInstance()->playSound(E_SOUNDS::notify);
 
+    if(C_RemoteInterfaceHandler::getInstance())
+        C_RemoteInterfaceHandler::getInstance()->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_set_name, QByteArray(C_RemoteInterfaceHandler::getInstance()->getClient()->getName().toLatin1())));
+
 #ifndef LOOP_CONNECTION
     W_MessageBoxContinue popup(this, "Vous êtes connecté");
     popup.exec();

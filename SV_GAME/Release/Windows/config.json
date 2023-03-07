@@ -1,0 +1,8 @@
+{
+    "Enable music": true,
+    "Enable sounds": true,
+    "IP": "127.0.0.1",
+    "Name": "Joueur",
+    "Port": 30000,
+    "Volume": 80
+}

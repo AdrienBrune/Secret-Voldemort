@@ -57,6 +57,7 @@ void W_ScreenLaws::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);
 
     painter.setOpacity(0.8);
+    painter.setPen(QPen(QColor(0,0,0,0), 0));
     painter.setBrush(QColor(20, 20, 20));
     painter.drawRect(rect());
 

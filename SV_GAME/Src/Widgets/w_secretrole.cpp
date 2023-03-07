@@ -87,6 +87,7 @@ void W_SecretRole::paintEvent(QPaintEvent *)
 
     /* Draw background */
     painter.setOpacity(0.7);
+    painter.setPen(QPen(QColor(0,0,0,0), 0));
     painter.setBrush(QColor(250,250,250));
     painter.drawRoundedRect(rect(), 12, 12, Qt::RelativeSize);
 
