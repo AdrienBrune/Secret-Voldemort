@@ -11,7 +11,10 @@ C_Player::C_Player(QWidget *parent, C_TcpSocketAck *socket)
     , mFlagFocus(false)
     , mSocket(socket)
 {
-    connect(socket, &C_TcpSocketAck::sig_messageReceived, this, &C_Player::onMessageReceived);
+    if(socket)
+    {
+        connect(socket, &C_TcpSocketAck::sig_messageReceived, this, &C_Player::onMessageReceived);
+    }
     hide();
 }
 
