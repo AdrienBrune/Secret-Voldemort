@@ -44,9 +44,9 @@
         <file>Music_GameFinished.wav</file>
         <file>Sound_Clicked.wav</file>
         <file>Sound_Draw.wav</file>
-        <file>Sound_Kill.mp3</file>
         <file>Sound_Hover.wav</file>
         <file>Sound_CardSelection.wav</file>
         <file>Sound_Notify.wav</file>
+        <file>Sound_Kill.wav</file>
     </qresource>
 </RCC>
