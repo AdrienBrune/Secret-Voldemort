@@ -1,2 +1,35 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/images">
+        <file>background.png</file>
+        <file>board_deathEater_56.png</file>
+        <file>board_deathEater_78.png</file>
+        <file>board_deathEater_910.png</file>
+        <file>board_phenixOrder.png</file>
+        <file>easel_Director.png</file>
+        <file>easel_Minister.png</file>
+        <file>Law.png</file>
+        <file>Law_DeathEater.png</file>
+        <file>Law_PhenixOrder.png</file>
+        <file>Power_Assassinat.png</file>
+        <file>Power_Clairvoyance.png</file>
+        <file>Power_Coup d'état.png</file>
+        <file>Power_Espionnage.png</file>
+        <file>Role_Albus Dumbledor.png</file>
+        <file>Role_Beatrix Lestrange.png</file>
+        <file>Role_Drago Malfoy.png</file>
+        <file>Role_Harry Potter.png</file>
+        <file>Role_Hermione Granger.png</file>
+        <file>Role_Lord Voldemort.png</file>
+        <file>Role_Lucius Malfoy.png</file>
+        <file>Role_Neville Londubat.png</file>
+        <file>Role_Ron Weasley.png</file>
+        <file>Role_Sirius Black.png</file>
+        <file>easel_Former.png</file>
+        <file>warning.png</file>
+        <file>Vote_flag.png</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>font_germania.ttf</file>
+        <file>font_harrypotter.ttf</file>
+    </qresource>
+</RCC>

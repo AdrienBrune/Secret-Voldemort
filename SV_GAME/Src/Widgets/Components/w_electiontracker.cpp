@@ -4,7 +4,12 @@
 
 W_ElectionTracker::W_ElectionTracker(QWidget *parent)
     : C_ElectionTracker(parent)
+    , mHover(false)
 {
+    setToolTip("Le Ministère de la magie entrera en état de chaos si 3 jetons sont posés\n"
+               "Un jeton sera posé à chaque fois qu'un tour se termine sans avoir élu de Directeur de Poudlard\n"
+               "Les jetons sont retirés dès qu'un Directeur est élu\n"
+               "Le chaos entraine le vote de la loi du dessus de la pile et tout le monde devient éligible au prochain tour");
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     show();
 }
@@ -74,7 +79,12 @@ void W_ElectionTracker::paintEvent(QPaintEvent *)
 
     // Draw text
     QString string("Jetons d'élection");
-    painter.setFont(C_AutoScaleFont("Germania", string, textArea));
+    C_AutoScaleFont fontText("Germania", string, textArea);
+    if(mHover)
+        fontText.setPointSize(fontText.pointSize());
+    else
+        fontText.setPointSize(fontText.pointSize()-fontText.pointSize()*0.1);
+    painter.setFont(fontText);
     painter.setPen(QPen(QColor(250, 250, 250), 1));
     painter.drawText(textArea, Qt::AlignCenter, string);
 

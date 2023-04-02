@@ -4,6 +4,7 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "../../Shared/Components/c_player.h"
 
@@ -23,11 +24,13 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent*)override;
+    bool eventFilter(QObject* object, QEvent* event)override;
 
 private:
     QList<C_Player*> *mPlayersList;
     QVBoxLayout *mLayout;
     QWidget *mScrollAreaWidgetContent;
+    QPoint mLastMouseDragLocation;
 };
 
 #endif // W_PLAYERSMANAGEMENT_H

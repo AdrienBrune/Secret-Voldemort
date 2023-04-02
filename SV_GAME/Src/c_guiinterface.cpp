@@ -18,6 +18,7 @@ C_GuiInterface::C_GuiInterface(QWidget *parent)
     , wScreenSpying(nullptr)
     , wScreenPower(nullptr)
     , wScreenMenu(nullptr)
+    , wScreenEndGame(nullptr)
     , mEnableMenu(true)
 {
     ui->setupUi(this);
@@ -294,6 +295,38 @@ void C_GuiInterface::displayScreenPowerUnlocked(C_LawBoard::E_POWER power)
     wScreenPower->update();
 }
 
+void C_GuiInterface::onQuitScreenPower(C_LawBoard::E_POWER power)
+{
+    if(wScreenPower)
+    {
+        delete wScreenPower;
+        wScreenPower = nullptr;
+    }
+    emit sig_PowerReady(power);
+}
+
+void C_GuiInterface::displayScreenEndGame(C_LawCard::E_FACTION faction)
+{
+    if(wScreenEndGame)
+    {
+        delete wScreenEndGame;
+        wScreenEndGame = nullptr;
+    }
+
+    wScreenEndGame = new W_ScreenEndGame(this, faction);
+    connect(wScreenEndGame, &W_ScreenEndGame::sig_timeout, this, &C_GuiInterface::onQuitScreenEndGame);
+    wScreenEndGame->update();
+}
+
+void C_GuiInterface::onQuitScreenEndGame()
+{
+    if(wScreenEndGame)
+    {
+        delete wScreenEndGame;
+        wScreenEndGame = nullptr;
+    }
+}
+
 void C_GuiInterface::quitAllScreen()
 {
     if(wScreenLaws)
@@ -316,16 +349,6 @@ void C_GuiInterface::quitAllScreen()
         delete wScreenVote;
         wScreenVote = nullptr;
     }
-}
-
-void C_GuiInterface::onQuitScreenPower(C_LawBoard::E_POWER power)
-{
-    if(wScreenPower)
-    {
-        delete wScreenPower;
-        wScreenPower = nullptr;
-    }
-    emit sig_PowerReady(power);
 }
 
 void C_GuiInterface::onOpenSettings()

@@ -4,11 +4,15 @@
 
 #include <QAbstractSlider>
 #include <QTimer>
+#include <QWheelEvent>
+#include <QScrollBar>
+#include <QEvent>
 
 W_PlayersManagement::W_PlayersManagement(QWidget *parent)
     : QScrollArea(parent)
     , mPlayersList(nullptr)
     , mLayout(nullptr)
+    , mLastMouseDragLocation(-1,-1)
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setStyleSheet("W_PlayersManagement{"
@@ -61,14 +65,18 @@ W_PlayersManagement::W_PlayersManagement(QWidget *parent)
     mPlayersList = C_PlayersHandler::getInstance()->getPlayers();
     connect(C_PlayersHandler::getInstance(), &C_PlayersHandler::sig_playerListUpdated, this, &W_PlayersManagement::onUpdateList);
 
+    QScrollBar *v = verticalScrollBar();
     setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+    v->setSingleStep(4);
 
     mScrollAreaWidgetContent = new QWidget();
     mScrollAreaWidgetContent->setStyleSheet("QWidget{background-color:rgba(0,0,0,0);}");
     mLayout = new QVBoxLayout(mScrollAreaWidgetContent);
     mLayout->setSpacing(0);
     setWidget(mScrollAreaWidgetContent);
+
+    viewport()->installEventFilter(this);
 
     onUpdateList();
 }
@@ -117,4 +125,33 @@ void W_PlayersManagement::paintEvent(QPaintEvent *)
             dynamic_cast<W_Player*>(player)->setGlobalOpacity(1.0);
         }
     }
+}
+
+bool W_PlayersManagement::eventFilter(QObject *object, QEvent *event)
+{
+    if(object == viewport())
+    {
+        if(event->type() == QEvent::MouseMove)
+        {
+            /* Save position then left when mouse bouton press */
+            QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+            if(mLastMouseDragLocation.y() == -1)
+            {
+                mLastMouseDragLocation = mouseEvent->pos();
+                return true;
+            }
+            /* Scroll while mouse drag event */
+            QPoint delta = mouseEvent->pos() - mLastMouseDragLocation;
+            verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
+            mLastMouseDragLocation = mouseEvent->pos();
+
+            return true;
+        }
+        if(event->type() == QEvent::MouseButtonRelease)
+        {
+            mLastMouseDragLocation = QPoint(-1,-1);
+        }
+    }
+
+    return false;
 }

@@ -17,6 +17,9 @@ public:
     C_GameTracker(QWidget *parent = nullptr);
     ~C_GameTracker();
 
+signals:
+    void sig_printLog(QString);
+
 public:
     const C_Message_Event::E_EVENT &getEvent()const{ return mGameEvent; };
     void setEvent(C_Message_Event::E_EVENT event)
@@ -38,7 +41,7 @@ public:
     }
 
 protected:
-    quint8 getNumberStepToDisplay()const
+    quint8 getNumberStepToDisplay()
     {
         quint8 number = 0;
         for(int i = 0; i < C_Message_Event::E_EVENT::event_number; i++)
@@ -48,7 +51,7 @@ protected:
         }
         return number;
     };
-    bool isSkipEvent(C_Message_Event::E_EVENT event)const
+    bool isSkipEvent(C_Message_Event::E_EVENT event)
     {
         if(event < C_Message_Event::E_EVENT::event_number)
         {

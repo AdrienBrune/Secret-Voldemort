@@ -62,18 +62,15 @@ void C_ServerTcp::onServerSocketError(QAbstractSocket::SocketError socketError)
 
     if(socketError == QAbstractSocket::SocketError::UnknownSocketError)
     {
-        qDebug() << "QAbstractSocket::SocketError::UnknownSocketError";
         LOG_DBG(QString("QAbstractSocket::SocketError::UnknownSocketError"));
         return;
     }
 
-    qDebug() << QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]);
     LOG_DBG(QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]));
 }
 
 void C_ServerTcp::onClientDisconnected()
 {
-    qDebug() << "Client déconnecté";
     emit sig_removePlayer(dynamic_cast<C_TcpSocketAck*>(sender()));
 }
 
@@ -89,7 +86,6 @@ void C_ServerTcp::onClientSocketEvent(QAbstractSocket::SocketState socketState)
         "ClosingState"
     };
 
-    qDebug() << QString("QAbstractSocket::SocketError::%1").arg(strStates[socketState]);
     LOG_DBG(QString("QAbstractSocket::SocketState::%1").arg(strStates[socketState]));
 }
 
@@ -123,12 +119,10 @@ void C_ServerTcp::onClientSocketError(QAbstractSocket::SocketError socketError)
 
     if(socketError == QAbstractSocket::SocketError::UnknownSocketError)
     {
-        qDebug() << "QAbstractSocket::SocketError::UnknownSocketError";
         LOG_DBG(QString("QAbstractSocket::SocketError::UnknownSocketError"));
         return;
     }
 
-    qDebug() << QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]);
     LOG_DBG(QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]));
 }
 

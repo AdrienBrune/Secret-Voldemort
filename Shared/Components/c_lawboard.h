@@ -25,6 +25,11 @@ public:
     C_LawBoard(QWidget *parent = nullptr, quint8 lawSpotNumber = 0);
     virtual~C_LawBoard();
 
+signals:
+    void sig_cardPut();
+    void sig_updateGUI();
+    void sig_printLog(QString);
+
 public:
     const quint8 &getCardsOnBoard()const{ return mCardsOnBoard; };
     void setCardsOnBoard(const quint8 &cardsOnBoard)
@@ -32,6 +37,7 @@ public:
         mCardsOnBoard = cardsOnBoard;
         if(mCardsOnBoard > mLawSpotNumber)
             mCardsOnBoard = mLawSpotNumber;
+        emit sig_updateGUI();
     };
 
     const quint8 &getLawSpotNumber()const{ return mLawSpotNumber; };
@@ -46,7 +52,7 @@ public:
     virtual E_POWER checkLawSpotPower(const quint8 &spotIndex)const;
 #else
     virtual E_POWER checkForPower(const quint8 &numberPlayers);
-    virtual E_POWER checkLawSpotPower(const quint8 &spotIndex, const quint8 &numberPlayers)const;
+    virtual E_POWER checkLawSpotPower(const quint8 &spotIndex, const quint8 &numberPlayers);
 #endif
 
 protected:
@@ -78,7 +84,7 @@ public:
     virtual E_POWER checkLawSpotPower(const quint8 &)const override{ return E_POWER::none; };
 #else
     virtual E_POWER checkForPower(const quint8 &)override{ mFlagPowerChecked = true; return E_POWER::none; };
-    virtual E_POWER checkLawSpotPower(const quint8 &, const quint8 &)const override{ return E_POWER::none; };
+    virtual E_POWER checkLawSpotPower(const quint8 &, const quint8 &)override{ return E_POWER::none; };
 #endif
 };
 

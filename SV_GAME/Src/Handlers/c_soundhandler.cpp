@@ -14,7 +14,9 @@ const QString Str_Sounds[] = {
     "Sound_Hover",
     "Sound_CardSelection",
     "Sound_Kill",
-    "Sound_Notify"
+    "Sound_Notify",
+    "Sound_Unlock",
+    "Sound_EndGame"
 };
 
 C_SoundHandler *C_SoundHandler::mSoundHandler = nullptr;

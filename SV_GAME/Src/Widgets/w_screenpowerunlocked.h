@@ -9,12 +9,8 @@
 #include "../../Shared/Components/c_lawboard.h"
 #include "Handlers/c_soundhandler.h"
 
-#define TIMEOUT_SCREEN_POWER_TRIGGER    6000
-
-#define DASH_OFFSET_MAX     20
-#define ANIMATION_STEP_MAX  20
-
-#define NUMBER_POWER    5
+#define TIMEOUT_SCREEN_POWER_TRIGGER    7000
+#define ANIMATION_STEP_MAX  1.0
 
 class W_Banner : public QWidget
 {
@@ -26,13 +22,14 @@ public:
         , mPower(power)
         , mAnimationStep(0)
     {
-        QTimer *timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &W_Banner::onAnimate);
-        timer->start(200);
-
         C_SoundHandler::getInstance()->playSound(E_SOUNDS::notify);
 
         show();
+
+        /* Setup animation */
+        QTimer *timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &W_Banner::onAnimate);
+        timer->start(1500);
     };
     ~W_Banner(){};
 
@@ -40,10 +37,20 @@ public:
     const C_LawBoard::E_POWER &getPower()const{ return mPower; };
 
 private slots:
-    void onAnimate(){
-        if(++mAnimationStep > ANIMATION_STEP_MAX)
-            mAnimationStep = 0;
-        update();
+    void onAnimate()
+    {
+        if(mAnimationStep < ANIMATION_STEP_MAX)
+        {
+            mAnimationStep++;
+            update();
+        }
+        if(mAnimationStep == ANIMATION_STEP_MAX)
+        {
+            QTimer *timer = dynamic_cast<QTimer*>(sender());
+            if(timer)
+                timer->stop();
+            C_SoundHandler::getInstance()->playSound(E_SOUNDS::unlock);
+        }
     };
 
 protected:
@@ -51,15 +58,15 @@ protected:
 
 private:
     C_LawBoard::E_POWER mPower;
-    quint8 mAnimationStep;
-    QColor mColor[NUMBER_POWER] = {
+    quint16 mAnimationStep;
+    QColor mColor[C_LawBoard::E_POWER::powersNumber] = {
         QColor(0, 0, 0),
         QColor(71, 116, 46),
         QColor(138, 68, 203),
         QColor(81, 112, 225),
         QColor(186, 26, 26)
     };
-    QString mLabelImage[NUMBER_POWER] = {
+    QString mLabelImage[C_LawBoard::E_POWER::powersNumber] = {
         "",
         "Coup d'état",
         "Clairvoyance",

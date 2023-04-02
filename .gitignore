@@ -18,6 +18,7 @@ SV_Server.pro.user
 
 TODO.txt
 Log.txt
+config.json
 .qmake.stash
 Makefile
 *.Debug

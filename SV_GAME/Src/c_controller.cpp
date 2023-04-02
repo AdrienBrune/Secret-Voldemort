@@ -26,6 +26,23 @@ C_Controller::C_Controller(QWidget *parent)
     QCursor cursor(QPixmap(":/images/custom_cursor.png"), 20, 20);
     setCursor(cursor);
 
+    /* Config file creation if not found */
+    QFile file("config.json");
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        LOG_DBG("Config file not found, file initialization ...");
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        file.write("{\n"
+                        "\t\"Enable music\": true,\n"
+                        "\t\"Enable sounds\": true,\n"
+                        "\t\"IP\": \"127.0.0.1\",\n"
+                        "\t\"Name\": \"MyName\",\n"
+                        "\t\"Port\": 30000,\n"
+                        "\t\"Volume\": 100\n"
+                    "}");
+        file.close();
+    }
+
     mRemoteInterface = C_RemoteInterfaceHandler::getInstance(); // Instance creation
     mBoard = C_BoardHandler::getInstance();                     // Instance creation
     mPlayers = C_PlayersHandler::getInstance();                 // Instance creation
@@ -86,8 +103,6 @@ C_Controller::~C_Controller()
 
 void C_Controller::Event_DirectorSelection(QByteArray data)
 {
-    qDebug() << "Event_DirectorSelection : " << data.size() << data;
-
     /* Hide potential opened screens */
     mView->quitAllScreen();
 
@@ -103,8 +118,6 @@ void C_Controller::Event_DirectorSelection(QByteArray data)
 
 void C_Controller::Event_DirectorElection(QByteArray data)
 {
-    qDebug() << "Event_DirectorElection" << data.size() << data;
-
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
@@ -118,8 +131,6 @@ void C_Controller::Event_DirectorElection(QByteArray data)
 
 void C_Controller::Event_MinisterDraw(QByteArray data)
 {
-    qDebug() << "Event_MinisterDraw" << data.size() << data;
-
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
@@ -135,8 +146,6 @@ void C_Controller::Event_MinisterDraw(QByteArray data)
 
 void C_Controller::Event_MinisterDiscard(QByteArray data)
 {
-    qDebug() << "Event_MinisterDiscard" << data.size() << data;
-
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
@@ -152,8 +161,6 @@ void C_Controller::Event_MinisterDiscard(QByteArray data)
 
 void C_Controller::Event_DirectorDiscard(QByteArray data)
 {
-    qDebug() << "Event_DirectorDiscard" << data.size() << data;
-
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
@@ -169,8 +176,6 @@ void C_Controller::Event_DirectorDiscard(QByteArray data)
 
 void C_Controller::Event_DirectorAskedVeto(QByteArray data)
 {
-    qDebug() << "Event_DirectorAskedVeto" << data.size() << data;
-
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
     {
@@ -194,8 +199,6 @@ void C_Controller::Event_DirectorAskedVeto(QByteArray data)
 
 void C_Controller::Event_PowerSubstituteMinister(QByteArray data)
 {
-    qDebug() << "Event_PowerSubstituteMinister" << data.size() << data;
-
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::substituteMinister);
 
     C_Player *me = mPlayers->getMyPlayerInstance();
@@ -210,8 +213,6 @@ void C_Controller::Event_PowerSubstituteMinister(QByteArray data)
 
 void C_Controller::Event_PowerClairvoyance(QByteArray data)
 {
-    qDebug() << "Event_PowerClairvoyance" << data.size() << data;
-
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::clairvoyance);
 
     C_Player *me = mPlayers->getMyPlayerInstance();
@@ -231,8 +232,6 @@ void C_Controller::Event_PowerClairvoyance(QByteArray data)
 
 void C_Controller::Event_PowerSpying(QByteArray data)
 {
-    qDebug() << "Event_PowerSpying" << data.size() << data;
-
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::spying);
 
     C_Player *me = mPlayers->getMyPlayerInstance();
@@ -247,8 +246,6 @@ void C_Controller::Event_PowerSpying(QByteArray data)
 
 void C_Controller::Event_PowerAssassination(QByteArray data)
 {
-    qDebug() << "Event_PowerAssassination" << data.size() << data;
-
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::assassination);
 
     C_Player *me = mPlayers->getMyPlayerInstance();
@@ -264,6 +261,30 @@ void C_Controller::Event_PowerAssassination(QByteArray data)
 void C_Controller::EVENT_PowerPlayerAssassinated(QByteArray)
 {
     mSound->playSound(E_SOUNDS::kill);
+}
+
+void C_Controller::EVENT_EndGame(QByteArray)
+{
+    C_Player *Voldemort = nullptr;
+    for(C_Player *player : *mPlayers->getPlayers())
+    {
+        if(player->getRole() == C_Player::E_ROLE::Voldemort)
+        {
+            Voldemort = player;
+            break;
+        }
+    }
+
+    if(mBoard->getPhenixOrderBoard()->getCardsOnBoard() == 5
+          || Voldemort->getStatus() == C_Player::E_STATUS::dead)
+    {
+        mView->displayScreenEndGame(C_LawCard::E_FACTION::phenixOrder);
+    }
+    else if((mBoard->getDeathEaterBoard()->getCardsOnBoard() == 6)
+      || ((Voldemort->getFlagFocus() || Voldemort->getPosition() == C_Player::E_POSITION::Director) && mBoard->getDeathEaterBoard()->getCardsOnBoard() >= 3))
+    {
+        mView->displayScreenEndGame(C_LawCard::E_FACTION::deathEater);
+    }
 }
 
 void C_Controller::onEvent(C_Message_Event::E_EVENT event, QByteArray data)
@@ -284,11 +305,6 @@ void C_Controller::onEvent(C_Message_Event::E_EVENT event, QByteArray data)
     {
         (this->*eventFunctions[event])(data);
     }
-    else
-    {
-        qDebug() << QString("Event function not defined (eventIdx=%1)").arg(event);
-        return;
-    }
 }
 
 void C_Controller::onNotify(QString string)
@@ -300,7 +316,6 @@ void C_Controller::onNotify(QString string)
 
 void C_Controller::onPlayerClicked(C_Player *player)
 {
-    qDebug() << player->getName() << " Cliqué";
     mView->enablePlayersInteraction(false);
 
     if(!mGame->getGameTracker())
@@ -336,7 +351,6 @@ void C_Controller::onPlayerClicked(C_Player *player)
 
 void C_Controller::onDrawLawCards()
 {
-    qDebug() << "Draw 3 Laws";
     mView->enableDrawing(false);
 
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_Minister_drew));
@@ -344,8 +358,6 @@ void C_Controller::onDrawLawCards()
 
 void C_Controller::onDiscardLawCard(C_LawCard::E_FACTION law)
 {
-    qDebug() << "onDiscard " << law;
-
     switch(mGame->getGameTracker()->getEvent())
     {
         case C_Message_Event::E_EVENT::SC_Director_discard:
@@ -364,29 +376,21 @@ void C_Controller::onDiscardLawCard(C_LawCard::E_FACTION law)
 
 void C_Controller::onAskVeto()
 {
-    qDebug() << "onAskVeto";
-
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_Director_asked_veto));
 }
 
 void C_Controller::onClairvoyancePowerUsed()
 {
-    qDebug() << "onClairvoyancePowerUsed";
-
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_clairvoyance_used));
 }
 
 void C_Controller::onSpyingPowerUsed()
 {
-    qDebug() << "onSpyingPowerUsed";
-
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_spying_carried_out));
 }
 
 void C_Controller::onVote(W_VoteCard::E_VOTE vote)
 {
-    qDebug() << "onVote " << vote;
-
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_player_voted, QByteArray().append(static_cast<quint8>(vote))));
 }
 

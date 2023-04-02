@@ -3,10 +3,6 @@
         <file>easel_Director.png</file>
         <file>easel_Minister.png</file>
         <file>background.png</file>
-        <file>board_deathEater_56.png</file>
-        <file>board_deathEater_78.png</file>
-        <file>board_deathEater_910.png</file>
-        <file>board_phenixOrder.png</file>
         <file>custom_cursor.png</file>
         <file>Role_Albus Dumbledor.png</file>
         <file>Role_Beatrix Lestrange.png</file>
@@ -34,6 +30,16 @@
         <file>Power_Coup d'état.png</file>
         <file>Power_Espionnage.png</file>
         <file>Power_Clairvoyance.png</file>
+        <file>Avada_Kedavra.png</file>
+        <file>Board_DeathEater.png</file>
+        <file>Divination.png</file>
+        <file>Endoloris.png</file>
+        <file>Impero.png</file>
+        <file>Board_PhenixOrder.png</file>
+        <file>lock.png</file>
+        <file>unlock.png</file>
+        <file>endGame_Mangemort.png</file>
+        <file>endGame_PhenixOrder.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>font_germania.ttf</file>
@@ -48,5 +54,7 @@
         <file>Sound_CardSelection.wav</file>
         <file>Sound_Notify.wav</file>
         <file>Sound_Kill.wav</file>
+        <file>Sound_Unlock.wav</file>
+        <file>Sound_EndGame.wav</file>
     </qresource>
 </RCC>

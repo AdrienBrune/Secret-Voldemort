@@ -19,6 +19,7 @@
 #include "Widgets/w_screenlaws.h"
 #include "Widgets/w_screenspying.h"
 #include "Widgets/w_screenpowerunlocked.h"
+#include "Widgets/w_screenendgame.h"
 
 namespace Ui{
     class C_GuiInterface;
@@ -54,6 +55,7 @@ public slots:
     void onAskVeto();
     void onQuitScreenSpying();
     void onQuitScreenPower(C_LawBoard::E_POWER power);
+    void onQuitScreenEndGame();
     void onOpenSettings();
 
 protected:
@@ -79,6 +81,7 @@ public:
     void displayScreenLaws(quint8 cardNumberToShow, bool readOnly = false);
     void displayScreenSpying(C_Player *player);
     void displayScreenPowerUnlocked(C_LawBoard::E_POWER power);
+    void displayScreenEndGame(C_LawCard::E_FACTION faction);
     void quitAllScreen();
 
 protected:
@@ -105,6 +108,7 @@ private:
     W_ScreenSpying *wScreenSpying;
     W_ScreenPowerUnlocked *wScreenPower;
     W_ScreenMenu *wScreenMenu;
+    W_ScreenEndGame *wScreenEndGame;
 
     bool mEnableMenu;
 };

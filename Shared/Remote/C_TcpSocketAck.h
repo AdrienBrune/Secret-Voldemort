@@ -56,6 +56,7 @@ signals:
     void sig_clientSocketError(QAbstractSocket::SocketError);
     void sig_messageReceived(C_Message *);
     void sig_updateView();
+    void sig_printLog(QString);
 
 private slots:
     void onMachineState()

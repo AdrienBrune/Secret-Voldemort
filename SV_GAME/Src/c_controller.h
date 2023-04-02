@@ -38,6 +38,7 @@ public:
     void Event_PowerSpying(QByteArray data = nullptr);
     void Event_PowerAssassination(QByteArray data = nullptr);
     void EVENT_PowerPlayerAssassinated(QByteArray data = nullptr);
+    void EVENT_EndGame(QByteArray data = nullptr);
 
 public slots:
     void onEvent(C_Message_Event::E_EVENT, QByteArray data = nullptr);
@@ -92,7 +93,7 @@ private:
             &C_Controller::EVENT_PowerPlayerAssassinated,
             nullptr,
             nullptr,
-            nullptr,
+            &C_Controller::EVENT_EndGame,
             nullptr
     };
 

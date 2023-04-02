@@ -44,7 +44,6 @@ C_ClientTcp::~C_ClientTcp()
 
 void C_ClientTcp::onConnect()
 {
-    qDebug() << "Client connection attempt to " << mIP << ":" << mPort;
     LOG_DBG(QString("Client connection attempt to %1:%2").arg(mIP).arg(mPort));
 
     onDisconnect();
@@ -62,7 +61,6 @@ void C_ClientTcp::onDisconnect()
 {
     if(mClientSocket->state() == QAbstractSocket::ConnectedState)
     {
-        qDebug() << "Client disconnection attempt from " << mIP << ":" << mPort;
         LOG_DBG(QString("Client disconnection attempt from %1:%2").arg(mIP).arg(mPort));
         mClientSocket->close();
     }
@@ -86,7 +84,6 @@ void C_ClientTcp::onSocketEvent(QAbstractSocket::SocketState socketState)
         "ClosingState"
     };
 
-    qDebug() << QString("QAbstractSocket::SocketError::%1").arg(strStates[socketState]);
     LOG_DBG(QString("QAbstractSocket::SocketState::%1").arg(strStates[socketState]));
 }
 
@@ -120,12 +117,10 @@ void C_ClientTcp::onSocketError(QAbstractSocket::SocketError socketError)
 
     if(socketError == QAbstractSocket::SocketError::UnknownSocketError)
     {
-        qDebug() << "QAbstractSocket::SocketError::UnknownSocketError";
         LOG_DBG(QString("QAbstractSocket::SocketError::UnknownSocketError"));
         return;
     }
 
-    qDebug() << QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]);
     LOG_DBG(QString("QAbstractSocket::SocketError::%1").arg(strErrors[socketError]));
 }
 

@@ -18,6 +18,9 @@ public:
 signals:
     void sig_draw();
 
+private slots:
+    void onUpdateGUI();
+
 public:
     const bool &getClickable()const{ return mClickable; };
     void setClickable(const bool &toggle){ mClickable = toggle; };

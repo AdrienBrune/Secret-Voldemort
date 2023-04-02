@@ -1,10 +1,9 @@
 #include "../../Shared/Components/c_stack.h"
 #include <QRandomGenerator>
-#include <QtDebug>
+#include "../../Shared/debug.h"
 
-#define NUMBER_OF_CARDS             27.0
-#define MANGEMORT_NUMBER_OF_CARD    22.0
-#define PHENIXORDER_NUMBER_OF_CARD  8.0
+#define MANGEMORT_NUMBER_OF_CARD    11.0
+#define PHENIXORDER_NUMBER_OF_CARD  6.0
 
 C_Stack::C_Stack(QWidget *parent)
     : QWidget(parent)
@@ -50,23 +49,28 @@ void C_Stack::reshuffleStack()
         }
 
     }while(cardPutNumber <= MANGEMORT_NUMBER_OF_CARD + PHENIXORDER_NUMBER_OF_CARD);
+
+    emit sig_updateGUI();
 }
 
 C_LawCard C_Stack::drawCardFromTop()
 {
-    return mLawCards.takeLast();
+    C_LawCard card = mLawCards.takeLast();
+    emit sig_updateGUI();
+    return card;
 }
 
 void C_Stack::putCardOnTop(C_LawCard law)
 {
     mLawCards.append(law);
+    emit sig_updateGUI();
 }
 
-C_LawCard C_Stack::seeCard(quint8 index) const
+C_LawCard C_Stack::seeCard(quint8 index)
 {
     if(index >= mLawCards.size())
     {
-        qDebug() << "Error : C_Stack::seeCard";
+        LOG_DBG("Error card could not have been seen");
         return C_LawCard::E_FACTION::deathEater;
     }
 

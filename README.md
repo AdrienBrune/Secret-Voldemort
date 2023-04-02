@@ -2,8 +2,8 @@
 
 <ul>
 <li>Creator : BRUNE Adrien</li>
-<li>Version : 1.0.0</li>
-<li>Date : 17/02/2023</li>
+<li>Version : 1.0.1</li>
+<li>Date : 01/04/2023</li>
 </ul>
 
 <img src="./SV_GAME/Src/Resources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">

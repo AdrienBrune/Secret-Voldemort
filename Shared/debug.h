@@ -8,7 +8,7 @@
 #ifdef LOG_VIA_FILE
     #define LOG_DBG(str) log(QString("%1 Ligne[%2] Function[%3] : %4\n").arg(QDateTime::currentDateTime().toString()).arg(__LINE__).arg(__FUNCTION__).arg(str))
 #elif SERVER_FEATURES
-    #define LOG_DBG(str) ui->outputLog->append(QString("%1 Ligne[%2] Function[%3] : %4\n").arg(QDateTime::currentDateTime().toString()).arg(__LINE__).arg(__FUNCTION__).arg(str))
+    #define LOG_DBG(str) emit sig_printLog(QString("%1 Ligne[%2] Function[%3] :\n   %4\n").arg(QDateTime::currentDateTime().toString()).arg(__LINE__).arg(__FUNCTION__).arg(str))
 #else
     #define LOG_DBG(str) qDebug() << __LINE__ << __FUNCTION__ << str
 #endif

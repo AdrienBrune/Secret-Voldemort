@@ -37,6 +37,10 @@ public:
     C_Stack(QWidget *parent = nullptr);
     ~C_Stack();
 
+signals:
+    void sig_updateGUI();
+    void sig_printLog(QString);
+
 public:
     QList<C_LawCard> &getStack(){ return mLawCards; };
     void setStack(const QList<C_LawCard> &stack)
@@ -45,13 +49,14 @@ public:
             mLawCards.removeLast();
         for(int i = 0; i < stack.size(); i++)
             mLawCards.append(stack.at(i));
+        emit sig_updateGUI();
     };
 
 public:
     void reshuffleStack();
     C_LawCard drawCardFromTop();
     void putCardOnTop(C_LawCard law);
-    C_LawCard seeCard(quint8 index)const;
+    C_LawCard seeCard(quint8 index);
 
 protected:
     QList<C_LawCard> mLawCards;

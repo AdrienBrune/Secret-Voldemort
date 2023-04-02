@@ -11,6 +11,7 @@ INCLUDEPATH += $$PWD/$$PWD
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    GUI/servergui.cpp \
     c_controller.cpp \
     Remote/c_servertcp.cpp \
     c_tools.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
     ../../Shared/Components/c_electiontracker.cpp
 
 HEADERS += \
+    GUI/servergui.h \
     c_controller.h \
     Remote/c_servertcp.h \
     ../../Shared/debug.h \
@@ -51,4 +53,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     Ressources/Ressources.qrc
 
-DEFINES += LOG_VIA_FILE SERVER_FEATURES
+DEFINES += SERVER_FEATURES

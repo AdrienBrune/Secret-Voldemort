@@ -33,6 +33,20 @@ C_Controller::C_Controller(QWidget *parent)
     QTimer *tMachineState = new QTimer(this);
     connect(tMachineState, &QTimer::timeout, this, &C_Controller::onMachineState);
     tMachineState->start(50);
+
+    // Server GUI linking
+
+    ui->stack->setStack(mStack);
+    ui->Board_DeathEater->setLawBoard(mDeathEaterBoard);
+    connect(mDeathEaterBoard, &C_LawBoard::sig_cardPut, ui->Board_DeathEater, &GUI_LawBoard::onUpdateGUI);
+    ui->Board_PhenixOrder->setLawBoard(mPhenixOrderBoard);
+    connect(mPhenixOrderBoard, &C_LawBoard::sig_cardPut, ui->Board_PhenixOrder, &GUI_LawBoard::onUpdateGUI);
+    connect(this, &C_Controller::sig_printLog, this, &C_Controller::onPrintLog);
+    connect(mServer, &C_ServerTcp::sig_printLog, this, &C_Controller::sig_printLog);
+    connect(mPhenixOrderBoard, &C_LawBoard::sig_printLog, this, &C_Controller::sig_printLog);
+    connect(mDeathEaterBoard, &C_LawBoard::sig_printLog, this, &C_Controller::sig_printLog);
+    connect(mGameTracker, &C_GameTracker::sig_printLog, this, &C_Controller::sig_printLog);
+    connect(mStack, &C_Stack::sig_printLog, this, &C_Controller::sig_printLog);
 }
 
 C_Controller::~C_Controller()
@@ -56,13 +70,7 @@ void C_Controller::onEvent(C_Message_Event::E_EVENT event, C_Player *player, con
 
     if(eventFunctions[event])
     {
-        qDebug() << "onEvent=" << event;
         (this->*eventFunctions[event])(player, data);
-    }
-    else
-    {
-        qDebug() << QString("Event function not defined (eventIdx=%1)").arg(event);
-        return;
     }
 }
 
@@ -147,8 +155,6 @@ void C_Controller::EVENT_MinisterDrew(C_Player *, const QByteArray &)
 
 void C_Controller::EVENT_MinisterDiscarded(C_Player *, const QByteArray &data)
 {
-    qDebug() << *mStack; // To remove
-
     quint8 law;
     QDataStream stream(data);
 
@@ -173,8 +179,6 @@ void C_Controller::EVENT_MinisterDiscarded(C_Player *, const QByteArray &data)
 
 void C_Controller::EVENT_DirectorDiscarded(C_Player *, const QByteArray &data)
 {
-    qDebug() << *mStack; // To remove
-
     quint8 law;
     QDataStream stream(data);
     C_LawBoard *lawBoard = nullptr;
@@ -211,8 +215,6 @@ void C_Controller::EVENT_DirectorDiscarded(C_Player *, const QByteArray &data)
             addNextState(new C_NextStep(st_endOfTurn, DEFAULT_TIME_BEETWEEN_STEP));
         }
     }
-
-    qDebug() << *mStack; // To remove
 }
 
 void C_Controller::EVENT_DirectorAskedVeto(C_Player *, const QByteArray &)
@@ -344,6 +346,7 @@ void C_Controller::onMachineState()
                     LOG_DBG("Error next state stamp another state");
                 }
                 mMachineStep = mStepQueue.first()->getNextStep();
+                emit sig_machineStepChanged();
                 delete mStepQueue.takeFirst();
                 sStepQueueSt = 0;
             }
@@ -361,9 +364,6 @@ void C_Controller::onMachineState()
     C_Player *director = C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director);
     C_Player *playerFocus = C_Tools::getFocusedPlayer(&mPlayers);
     C_LawBoard *board = nullptr;
-
-    if(mMachineStep != E_ST::st_iddle)
-        qDebug() << "MachineStep = " << mMachineStep;
 
     switch(mMachineStep)
     {
@@ -509,7 +509,7 @@ void C_Controller::onMachineState()
 
     default:
         mMachineStep = E_ST::st_iddle;
-        qDebug() << "Step not handled : " << mMachineStep;
+        LOG_DBG(QString("Error step not handled (id=%1)").arg(mMachineStep));
         break;
     }
     mMachineStep = E_ST::st_iddle;
@@ -734,8 +734,9 @@ void C_Controller::onAddPlayer(C_TcpSocketAck *client)
         player->setStatus(C_Player::E_STATUS::connected);
     }
     mPlayers.append(player);
+
+    updateGUIPlayerList();
     sendUpdatedGameToPlayers();
-    qDebug() << "Player added";
 }
 
 void C_Controller::onRemovePlayer(C_TcpSocketAck *client)
@@ -748,7 +749,6 @@ void C_Controller::onRemovePlayer(C_TcpSocketAck *client)
             || mGameTracker->getEvent() == C_Message_Event::E_EVENT::SC_game_finished)
             {
                 delete mPlayers.takeAt(i);
-                qDebug() << "Player removed";
             }
             else
             {
@@ -756,7 +756,21 @@ void C_Controller::onRemovePlayer(C_TcpSocketAck *client)
             }
         }
     }
+    updateGUIPlayerList();
     sendUpdatedGameToPlayers();
+}
+
+void C_Controller::updateGUIPlayerList()
+{
+    while(!mGUIPlayers.isEmpty())
+        delete mGUIPlayers.takeLast();
+
+    for(C_Player *player : qAsConst(mPlayers))
+    {
+        GUI_Player *guiPlayer = new GUI_Player(this, player);
+        ui->layoutPlayers->addWidget(guiPlayer);
+        mGUIPlayers.append(guiPlayer);
+    }
 }
 
 void C_Controller::onMessageReceived(C_Message *message, C_Player *player)
@@ -777,6 +791,11 @@ void C_Controller::onMessageReceived(C_Message *message, C_Player *player)
 
     LOG_DBG("Erreur message receive from client not an event, not a notif either");
     return;
+}
+
+void C_Controller::onPrintLog(QString message)
+{
+    ui->output_log->append(message);
 }
 
 void C_Controller::on_buttonRestartTurn_clicked()

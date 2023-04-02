@@ -12,6 +12,7 @@
 #include "../../Shared/Components/c_stack.h"
 #include "Remote/c_servertcp.h"
 #include "c_tools.h"
+#include "GUI/servergui.h"
 
 class C_NextStep;
 
@@ -84,11 +85,19 @@ public:
     C_Controller(QWidget *parent = nullptr);
     ~C_Controller();
 
+signals:
+    void sig_machineStepChanged();
+    void sig_printLog(QString);
+
 private slots:
     void onStartGame();
     void onAddPlayer(C_TcpSocketAck *client);
     void onRemovePlayer(C_TcpSocketAck *client);
     void onMessageReceived(C_Message *message, C_Player *player);
+    void onPrintLog(QString message);
+
+public:
+    E_ST getMachineState(){ return mMachineStep; }
 
 private:
     void onEvent(C_Message_Event::E_EVENT event, C_Player *player, const QByteArray &data);
@@ -126,6 +135,7 @@ private:
     void prepareCurrentTurn();
     void prepareNextTurn();
     E_VOTE voteResult();
+    void updateGUIPlayerList();
 
 private:
     /* MUST folow the C_Message_Event::E_EVENT enumeration - nullptr means not implemented */
@@ -185,6 +195,8 @@ private:
     QList<E_VOTE> mVoteStack;
     S_VOTE_RESULTS mVoteResults;
     C_Player *nextSubstituteMinister;
+
+    QList<GUI_Player*> mGUIPlayers;
 
 private:
     Ui::C_Controller *ui;

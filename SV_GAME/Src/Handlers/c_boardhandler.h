@@ -14,6 +14,7 @@ class C_BoardHandler : public QWidget
 
 protected:
     C_BoardHandler(QWidget *parent = nullptr);
+
 public:
     C_BoardHandler(C_BoardHandler &other) = delete;
     void operator=(const C_BoardHandler &) = delete;
@@ -24,7 +25,7 @@ public:
 
 public:
     C_Stack *getStack()const{ return mStack; };
-    void setStack(C_Stack* stack){ mStack = stack; };;
+    void setStack(C_Stack* stack){ mStack = stack; };
     C_LawBoard *getDeathEaterBoard()const{ return mDeathEaterBoard; };
     void setDeathEaterBoard(C_LawBoard *board){ mDeathEaterBoard = board; };
     C_LawBoard *getPhenixOrderBoard()const{ return mPhenixOrderBoard; };

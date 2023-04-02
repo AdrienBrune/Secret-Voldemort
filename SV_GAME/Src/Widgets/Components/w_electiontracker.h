@@ -16,9 +16,14 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event)override;
+    void leaveEvent(QEvent*)override{ mHover = false; update(); };
+    void enterEvent(QEvent*)override{ mHover = true; update(); };
 
 private:
     void drawToken(QPainter *painter, quint8 index, bool visible);
+
+protected:
+    bool mHover;
 };
 
 #endif // W_ELECTIONTRACKER_H

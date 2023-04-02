@@ -14,6 +14,8 @@ enum E_SOUNDS{
     cardSelection,
     kill,
     notify,
+    unlock,
+    endGame,
     soundsNumber
 };
 

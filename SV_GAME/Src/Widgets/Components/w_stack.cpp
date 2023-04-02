@@ -9,6 +9,7 @@ W_Stack::W_Stack(QWidget *parent)
     , mHover(false)
     , mClickable(false)
 {
+    connect(this, &C_Stack::sig_updateGUI, this, &W_Stack::onUpdateGUI);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     show();
 }
@@ -16,6 +17,11 @@ W_Stack::W_Stack(QWidget *parent)
 W_Stack::~W_Stack()
 {
 
+}
+
+void W_Stack::onUpdateGUI()
+{
+    setToolTip(QString("%1 cartes").arg(mLawCards.size()));
 }
 
 void W_Stack::leaveEvent(QEvent *)
@@ -56,13 +62,22 @@ void W_Stack::paintEvent(QPaintEvent *)
         area.setRect((width() - (heightLaw*(1/LAW_CARD_RATIO)))/2, height() - heightLaw - height()/10, heightLaw*(1/LAW_CARD_RATIO), heightLaw);
     }
 
+    if(!mHover)
+    {
+        QRect boundingArea(area.x(), area.y(), area.width(), area.height());
+        area.setRect(boundingArea.x() + boundingArea.width()*(1.0 - 9.0/10.0)/2, boundingArea.y() + boundingArea.height()*(1.0 - 9.0/10.0)/2, boundingArea.width()*9.0/10.0, boundingArea.height()*9.0/10.0);
+    }
+
+    /* Draw stack */
+    painter.drawPixmap(area, QPixmap(":/images/Law.png"));
+
+    /* Draw focus */
     painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
     painter.setPen(QPen(COLOR_ORANGE, 4));
-
-    painter.drawPixmap(area, QPixmap(":/images/Law.png"));
     if(mClickable)
         painter.drawRoundedRect(QRect(area.x()+4, area.y()+4, area.width()-8, area.height()-8), 5, 5);
 
+    /* Draw clickable */
     if(mHover && mClickable)
     {
         painter.rotate(2);
@@ -72,12 +87,12 @@ void W_Stack::paintEvent(QPaintEvent *)
         painter.drawPixmap(area, QPixmap(":/images/Law.png"));
         painter.drawRoundedRect(QRect(area.x()+4, area.y()+4, area.width()-8, area.height()-8), 5, 5);
     }
-    if(mHover && !mClickable)
-    {
-        painter.setPen(QPen(QColor(250, 250, 250)));
-        painter.setFont(QFont("Germania", area.width()/14));
-        painter.drawText(area.x(), area.y() + area.height()/2, area.width(), area.height()/2, Qt::AlignCenter, QString("%1 cartes\nrestantes").arg(mLawCards.size()));
-    }
+//    if(mHover && !mClickable)
+//    {
+//        painter.setPen(QPen(QColor(250, 250, 250)));
+//        painter.setFont(QFont("Germania", area.width()/14));
+//        painter.drawText(area.x(), area.y() + area.height()/2, area.width(), area.height()/2, Qt::AlignCenter, QString("%1 cartes\nrestantes").arg(mLawCards.size()));
+//    }
 }
 
 void W_Stack::mousePressEvent(QMouseEvent *)

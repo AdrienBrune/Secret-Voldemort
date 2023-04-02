@@ -20,6 +20,7 @@ signals:
     void sig_addPlayer(C_TcpSocketAck *socket);
     void sig_removePlayer(C_TcpSocketAck *socket);
     void sig_MessageReceived(C_Message *message);
+    void sig_printLog(QString);
 
 private slots:
     void onNewConnection();

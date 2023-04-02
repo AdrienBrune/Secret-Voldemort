@@ -55,6 +55,8 @@ void C_LawBoard::addCardOnBoard()
 
     mCardsOnBoard++;
     mFlagPowerChecked = false;
+    emit sig_cardPut();
+    emit sig_updateGUI();
 }
 
 #ifdef CLIENT_FEATURES
@@ -119,7 +121,7 @@ C_LawBoard::E_POWER C_LawBoard::checkForPower(const quint8 &numberPlayers)
 #ifdef CLIENT_FEATURES
 C_LawBoard::E_POWER C_LawBoard::checkLawSpotPower(const quint8 &spotIndex)const
 #else
-C_LawBoard::E_POWER C_LawBoard::checkLawSpotPower(const quint8 &spotIndex, const quint8 &numberPlayers)const
+C_LawBoard::E_POWER C_LawBoard::checkLawSpotPower(const quint8 &spotIndex, const quint8 &numberPlayers)
 #endif
 {
     E_POWER power = E_POWER::none;
