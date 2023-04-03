@@ -3,7 +3,7 @@
 
 #include <QRandomGenerator>
 
-#define DEFAULT_TIME_BEETWEEN_STEP  3000
+#define DEFAULT_TIME_BEETWEEN_STEP  4000
 
 C_Controller::C_Controller(QWidget *parent)
     : QMainWindow(parent)
@@ -419,7 +419,7 @@ void C_Controller::onMachineState()
         break;
 
     case E_ST::st_directorAskedVeto:
-        updateGameState(QString("%1 a demandé à ne pas voter de loi ce tour-ci").arg(minister ? minister->getName() : "Le Directeur de Poudlard"), C_Message_Event::SC_Director_asked_veto);
+        updateGameState(QString("%1 a demandé à ne pas voter de loi ce tour-ci").arg(director ? director->getName() : "Le Directeur de Poudlard"), C_Message_Event::SC_Director_asked_veto);
         break;
 
     case E_ST::st_ministerRefusedVeto:

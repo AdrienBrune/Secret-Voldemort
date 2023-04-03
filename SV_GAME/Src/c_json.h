@@ -15,7 +15,11 @@ public:
     void static saveParameter(const QString &paramName, const QString &value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -47,7 +51,11 @@ public:
     void static saveParameter(const QString &paramName, const double &value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -79,7 +87,11 @@ public:
     void static saveParameter(const QString &paramName, const bool &value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -111,7 +123,11 @@ public:
     void static loadParameter(const QString &paramName, QString *value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");
@@ -134,7 +150,11 @@ public:
     void static loadParameter(const QString &paramName, double *value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");
@@ -157,7 +177,11 @@ public:
     void static loadParameter(const QString &paramName, bool *value)
     {
         QString fileContent;
+#ifdef __APPLE__
+        QFile file("../config.json");
+#else
         QFile file("config.json");
+#endif
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");

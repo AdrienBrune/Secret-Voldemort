@@ -5,7 +5,7 @@
 
 W_MessageDisplayer::W_MessageDisplayer(QWidget *parent)
     : QLabel(parent)
-    , mMessage("Appuyer sur <echap> pour afficher le menu principale")
+    , mMessage("Appuyer sur <echap> pour afficher le menu principal")
     , mStep(iddle)
     , mDelay(nullptr)
 {

@@ -27,7 +27,11 @@ C_Controller::C_Controller(QWidget *parent)
     setCursor(cursor);
 
     /* Config file creation if not found */
+#ifdef __APPLE__
+    QFile file("../config.json");
+#else
     QFile file("config.json");
+#endif
     if(!file.open(QIODevice::ReadOnly))
     {
         LOG_DBG("Config file not found, file initialization ...");
@@ -42,6 +46,7 @@ C_Controller::C_Controller(QWidget *parent)
                     "}");
         file.close();
     }
+
 
     mRemoteInterface = C_RemoteInterfaceHandler::getInstance(); // Instance creation
     mBoard = C_BoardHandler::getInstance();                     // Instance creation
