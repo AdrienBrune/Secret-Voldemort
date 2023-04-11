@@ -8,34 +8,34 @@
 
 <img src="./SV_GAME/Src/Resources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">
 
-## Game
+## Introduction
 
-<p>Secret Voldemort is a strategic game involving 5 up to 10 players. 
-The games grants you a role that defines your behaviour during the game.
-The realm of magic is threaten by the dark forces of deatheaters lead by Voldemort himself.
-If you join the deatheaters, try to take the power by electing Voldemort as the Minister of magic.
-But if you're the resistance well known as the Phenix order, you'll have to fight the deatheaters by taking the Minister or slaying them all.
-When the game starts you are alone, you'll have to be perceptive enought to discover players of your team and rallying them to your cause.
-By doing so, maybe you will be able to overcome manipulations and be able to win the game, good luck.
+<p>Secret Voldemort is a strategic game that can be played from 5 up to 10 players.</p>
+<p><i>The realm of magic is threaten by the dark forces of Deatheaters lead by Voldemort himself.
+Deatheaters will try to take the power by taking control of the Minister of Magic. Voting policies or electing Voldemort Minister of magic will grant them the power to achieve their ambitions.
+On the other hand, powerfull wizards members of the Phenix Order will have to elect policies to take control of the Minister. Killing Voldemort is another way to end the war.
+When the game starts you are alone. Try your best to discover players's role and rally your faction to win together, good luck.</i></p>
+
+## Rules
 
 Official Secret Hitler rules : https://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf  
 Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGirl
 
-## Preview
+## Game preview
 <img src="./Preview/Preview_1.png" alt="Preview to add" width="700" height="400">
 <img src="./Preview/Preview_2.png" alt="Preview to add" width="700" height="400">
 <img src="./Preview/Preview_3.png" alt="Preview to add" width="700" height="400">
 <img src="./Preview/Preview_4.png" alt="Preview to add" width="700" height="400">
 
 ## How to play
-* Start server on a computer.
-* Ethernet port 30000 is used to communicate.
-* The server owner needs to operate a port redirection to redirect Ethernet paquet from livebox to the computer's server.
-  * Go to your box configuration.
-  * Got to port redirection.
-  * Add a rule.
-  * set TCP protocol.
-  * set the range port to [30000, 30000] (single port 30000 is used).
-  * set the computer IP adresse (go to Windows terminal "CMD", then tape the command line "ipconfig").
-  * Then you will have to give your public IP (IPV4) to other player (find it on internet "My ip").
-  * Your ready to play with players.
+* The server owner needs to operate a port redirection, this operation allows other players to reach the server owner's computer
+    * Go to your Ethernet box's configuration page
+    * Got to port redirection and add a new rule
+      * set TCP protocol, port range from 30000 to 30000, computer IP address
+        * To retrive computer local IP address, go to Windows terminal, then tape the command line "ipconfig", check IPV4 address
+* Start server on a computer
+  * Give Ethernet port "30000" to other players
+  * Give Ethernet public IP to other players
+    * Get the public IP from internet (tape "what's my ip" on a navigator)
+  * Let them connect to your server, then start a game
+  
