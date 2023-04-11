@@ -27,8 +27,8 @@ Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGir
 <img src="./Preview/Preview_3.png" alt="Preview to add" width="700" height="400">
 <img src="./Preview/Preview_4.png" alt="Preview to add" width="700" height="400">
 
-## Technical point
-* One serveur needs to be started to play.
+## How to play
+* Start server on a computer.
 * Ethernet port 30000 is used to communicate.
 * The server owner needs to operate a port redirection to redirect Ethernet paquet from livebox to the computer's server.
   * Go to your box configuration.
@@ -36,6 +36,6 @@ Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGir
   * Add a rule.
   * set TCP protocol.
   * set the range port to [30000, 30000] (single port 30000 is used).
-  * set the computer IP adresse (go to Windows CMD, then tape the command line "ipconfig").
-  * Then you will have to give your public IP to other player (find it on internet).
-  * Be ready to play.
+  * set the computer IP adresse (go to Windows terminal "CMD", then tape the command line "ipconfig").
+  * Then you will have to give your public IP (IPV4) to other player (find it on internet "My ip").
+  * Your ready to play with players.
