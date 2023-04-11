@@ -38,4 +38,11 @@ Video rules : https://www.youtube.com/watch?v=mbGXIDYdtas&ab_channel=TheRulesGir
   * Give Ethernet public IP to other players
     * Get the public IP from internet (tape "what's my ip" on a navigator)
   * Let them connect to your server, then start a game
+
+## Technical part
+<p>Game developed on Qt 5.15.2</p>
+
+Released :
+* Windows
+* MacOS
   
