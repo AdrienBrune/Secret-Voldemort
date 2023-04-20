@@ -86,6 +86,7 @@ public:
 
 public:
     void sendMessage(C_Message *message);
+    bool isPlaying()const;
 
 protected:
     QString mName;

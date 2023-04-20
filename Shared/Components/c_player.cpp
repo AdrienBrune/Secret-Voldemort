@@ -33,3 +33,11 @@ void C_Player::sendMessage(C_Message *message)
 {
     mSocket->loadMessage(message);
 }
+
+bool C_Player::isPlaying() const
+{
+    if(mStatus == E_STATUS::playing || mStatus == E_STATUS::dead)
+        return true;
+    else
+        return false;
+}

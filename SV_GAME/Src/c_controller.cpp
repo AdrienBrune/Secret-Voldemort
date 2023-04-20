@@ -130,7 +130,7 @@ void C_Controller::Event_DirectorElection(QByteArray data)
         return;
     }
 
-    if(me->getStatus() == C_Player::E_STATUS::playing)
+    if(me->isPlaying() && me->getStatus() != C_Player::E_STATUS::dead)
         mView->displayScreenVote();
 }
 

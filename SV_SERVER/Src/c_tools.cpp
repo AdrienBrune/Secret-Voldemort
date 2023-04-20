@@ -149,8 +149,7 @@ QList<C_Player*> C_Tools::getPlayerPlaying(QList<C_Player*> *playerList)
     QList<C_Player*> players;
     for(int i = 0; i < playerList->size(); i++)
     {
-        if((*playerList)[i]->getStatus() == C_Player::E_STATUS::dead
-        || (*playerList)[i]->getStatus() == C_Player::E_STATUS::playing)
+        if((*playerList)[i]->isPlaying())
         {
             players.append((*playerList)[i]);
         }

@@ -107,7 +107,7 @@ void W_DeathEaterBoard::paintEvent(QPaintEvent *)
         {
             boundingArea.setRect(slotArea.x(), slotArea.y(), slotArea.width(), slotArea.height());
         }
-        painter.drawPixmap(boundingArea, QPixmap(QString(":/images/%1.png").arg(gStrPowerImages[C_PlayersHandler::getInstance()->getPlayers()->size() > 10 ? 10 : C_PlayersHandler::getInstance()->getPlayers()->size()][i])));
+        painter.drawPixmap(boundingArea, QPixmap(QString(":/images/%1.png").arg(gStrPowerImages[C_PlayersHandler::getInstance()->getNumberPlayerPlaying() > 10 ? 10 : C_PlayersHandler::getInstance()->getNumberPlayerPlaying()][i])));
     }
 }
 
@@ -125,7 +125,7 @@ void W_DeathEaterBoard::mouseMoveEvent(QMouseEvent *mouseEvent)
                 return;
 
             mHover = i;
-            setToolTip(gStrPowerBoard[C_PlayersHandler::getInstance()->getPlayers()->size() > 10 ? 10 :C_PlayersHandler::getInstance()->getPlayers()->size()][i]);
+            setToolTip(gStrPowerBoard[C_PlayersHandler::getInstance()->getNumberPlayerPlaying() > 10 ? 10 :C_PlayersHandler::getInstance()->getNumberPlayerPlaying()][i]);
             update();
             return;
         }

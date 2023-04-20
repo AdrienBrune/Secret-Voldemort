@@ -49,6 +49,7 @@ public:
     C_Player *getPlayerFocus()const;
     QList<C_Player*> getDeathEaterTeam()const;
     quint8 getPlayerIdentifier(C_Player *player)const;
+    quint8 getNumberPlayerPlaying()const;
 
 protected:
     static C_PlayersHandler *mPlayersHandler;

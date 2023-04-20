@@ -160,3 +160,14 @@ quint8 C_PlayersHandler::getPlayerIdentifier(C_Player *player)const
 
     return 0xFF;
 }
+
+quint8 C_PlayersHandler::getNumberPlayerPlaying()const
+{
+    quint8 numberPlayers = 0;
+    for(C_Player *player : mPlayers)
+    {
+        if(player->isPlaying())
+            numberPlayers++;
+    }
+    return numberPlayers;
+}
