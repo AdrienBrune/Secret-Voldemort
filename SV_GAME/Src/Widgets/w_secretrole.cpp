@@ -107,9 +107,14 @@ void W_SecretRole::paintEvent(QPaintEvent *)
     for(int i = 0; i < (deathEaterTeam.size() > 3 ? 3 : deathEaterTeam.size()); i++)
     {
         QRect area = getTeamMateArea(i);
-        painter.drawPixmap(area, QPixmap(QString(":/images/Team_%1.png").arg(mNames[deathEaterTeam[i]->getRole()])));
+        painter.setOpacity(0.8);
+        painter.setPen(QColor(0,0,0,0));
+        painter.setBrush(QColor(50,50,50));
+        painter.drawRoundedRect(QRect(area.x(), area.y() + area.height()*2/3, area.width(), area.height()/3), 5, 5);
+        painter.setOpacity(1.0);
+        painter.drawPixmap(area, QPixmap(QString(":/images/Team_%1.png").arg(mNames[deathEaterTeam[i]->getRole()]))); 
         painter.setFont(QFont("Times New Roman", 10));
-        painter.setPen(QPen(QColor(0, 0, 0)));
+        painter.setPen(QPen(QColor(250, 250, 250)));
         painter.drawText(QRect(area.x(), area.y() + area.height()*2/3, area.width(), area.height()/3), Qt::AlignCenter, deathEaterTeam[i]->getName());
     }
 }
