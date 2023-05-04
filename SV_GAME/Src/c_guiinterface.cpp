@@ -32,7 +32,6 @@ C_GuiInterface::C_GuiInterface(QWidget *parent)
     wGameTracker = ui->GameTracker;
     wPlayersManagement = ui->PlayersManagement;
     connect(wPlayersManagement, &W_PlayersManagement::sig_playerClicked, this, &C_GuiInterface::sig_playerClicked);
-    connect(wStack, &W_Stack::sig_draw, this, &C_GuiInterface::sig_draw);
 
     wSecretRole = new W_SecretRole(this);
     wSecretRole->installEventFilter(this);
@@ -143,11 +142,6 @@ void C_GuiInterface::enablePlayersInteraction(bool toggle)
     onUpdateView();
 }
 
-void C_GuiInterface::enableDrawing(bool toggle)
-{
-    wStack->setClickable(toggle);
-}
-
 void C_GuiInterface::displayScreenMenu()
 {
     if(gSemaphoreMessageBox)
@@ -166,7 +160,6 @@ void C_GuiInterface::displayScreenMenu()
     connect(wScreenMenu, &W_ScreenMenu::sig_quit, this, &C_GuiInterface::onQuitScreenMenu);
     connect(wScreenMenu, &W_ScreenMenu::sig_openSettings, this, &C_GuiInterface::onOpenSettings);
     connect(wScreenMenu, &W_ScreenMenu::sig_quitGame, this, &C_GuiInterface::sig_quitGame);
-    C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
 }
 
 void C_GuiInterface::onQuitScreenMenu()
@@ -189,7 +182,6 @@ void C_GuiInterface::displayScreenVote()
 
     wScreenVote = new W_ScreenVote(this);
     connect(wScreenVote, &W_ScreenVote::sig_vote, this, &C_GuiInterface::onQuitScreenVote);
-    C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
 }
 
 void C_GuiInterface::onQuitScreenVote(W_VoteCard::E_VOTE vote)
@@ -203,7 +195,7 @@ void C_GuiInterface::onQuitScreenVote(W_VoteCard::E_VOTE vote)
         emit sig_vote(vote);
 }
 
-void C_GuiInterface::displayScreenLaws(quint8 cardNumberToShow, bool readOnly)
+void C_GuiInterface::displayScreenLawsMinister()
 {
     if(wScreenLaws)
     {
@@ -212,26 +204,23 @@ void C_GuiInterface::displayScreenLaws(quint8 cardNumberToShow, bool readOnly)
     }
 
     C_Stack *stack =  C_BoardHandler::getInstance()->getStack();
-    if(stack->getStack().size() < cardNumberToShow)
+    if(stack->getStack().size() < 3)
     {
         LOG_DBG("Error law cards in stack out of bound to be shown");
         return;
     }
 
-    QList<C_LawCard::E_FACTION> laws;
-    for(int i = stack->getStack().size() - cardNumberToShow; i < stack->getStack().size(); i++)
+    QList<C_LawCard> laws;
+    for(int i = stack->getStack().size() - 3; i < stack->getStack().size(); i++)
     {
-        laws.append(stack->getStack().at(i).getFaction());
+        laws.append(stack->getStack().at(i));
     }
 
-    wScreenLaws = new W_ScreenLaws(this, laws, readOnly);
-    connect(wScreenLaws, &W_ScreenLaws::sig_discard, this, &C_GuiInterface::onQuitScreenLaws);
-    connect(wScreenLaws, &W_ScreenLaws::sig_askVeto, this, &C_GuiInterface::onAskVeto);
-    connect(wScreenLaws, &W_ScreenLaws::sig_timeout, this, &C_GuiInterface::onQuitScreenLaws);
-    C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
+    wScreenLaws = new W_ScreenLawDisplayed(this, laws);
+    connect(wScreenLaws, &W_ScreenLawDisplayed::sig_discard, this, &C_GuiInterface::onLawDiscarded);
 }
 
-void C_GuiInterface::onQuitScreenLaws(C_LawCard::E_FACTION faction)
+void C_GuiInterface::displayScreenLawsDirector()
 {
     if(wScreenLaws)
     {
@@ -239,13 +228,80 @@ void C_GuiInterface::onQuitScreenLaws(C_LawCard::E_FACTION faction)
         wScreenLaws = nullptr;
     }
 
-    if(faction) // Card discarded
+    C_Stack *stack =  C_BoardHandler::getInstance()->getStack();
+    if(stack->getStack().size() < 2)
     {
-        emit sig_discard(faction);
+        LOG_DBG("Error law cards in stack out of bound to be shown");
+        return;
     }
-    else // Power clairvoyance
+
+    QList<C_LawCard> laws;
+    for(int i = stack->getStack().size() - 2; i < stack->getStack().size(); i++)
     {
-        emit sig_clairvoyancePowerUsed();
+        laws.append(stack->getStack().at(i));
+    }
+
+    wScreenLaws = new W_ScreenLawDisplayed(this, laws);
+    connect(wScreenLaws, &W_ScreenLawDisplayed::sig_discard, this, &C_GuiInterface::onLawDiscarded);
+    connect(wScreenLaws, &W_ScreenLawDisplayed::sig_askVeto, this, &C_GuiInterface::onAskVeto);
+}
+
+void C_GuiInterface::displayScreenLawsClairvoyance()
+{
+    if(wScreenLaws)
+    {
+        delete wScreenLaws;
+        wScreenLaws = nullptr;
+    }
+
+    C_Stack *stack =  C_BoardHandler::getInstance()->getStack();
+    if(stack->getStack().size() < 3)
+    {
+        LOG_DBG("Error law cards in stack out of bound to be shown");
+        return;
+    }
+
+    QList<C_LawCard> laws;
+    for(int i = stack->getStack().size() - 3; i < stack->getStack().size(); i++)
+    {
+        laws.append(stack->getStack().at(i));
+    }
+
+    wScreenLaws = new W_ScreenLawDisplayed(this, laws, false);
+    connect(wScreenLaws, &W_ScreenLawDisplayed::sig_timeout, this, &C_GuiInterface::onClairvoyanceDone);
+}
+
+void C_GuiInterface::displayScreenDrawPile()
+{
+    wScreenLaws = new W_ScreenLawDisplayed(this);
+    connect(wScreenLaws, &W_ScreenLawDisplayed::sig_drawPile, this, &C_GuiInterface::onLawCardsDrawn);
+}
+
+void C_GuiInterface::onLawCardsDrawn()
+{
+    emit sig_lawCardDrew();
+    onQuitScreenLaws();
+}
+
+void C_GuiInterface::onLawDiscarded(W_LawCard *law)
+{
+    C_LawCard::E_FACTION faction = law->getFaction();
+    onQuitScreenLaws();
+    emit sig_discard(faction);
+}
+
+void C_GuiInterface::onClairvoyanceDone()
+{
+    onQuitScreenLaws();
+    emit sig_clairvoyancePowerUsed();
+}
+
+void C_GuiInterface::onQuitScreenLaws()
+{
+    if(wScreenLaws)
+    {
+        delete wScreenLaws;
+        wScreenLaws = nullptr;
     }
 }
 
@@ -355,6 +411,7 @@ void C_GuiInterface::onOpenSettings()
 {
     emit sig_spyingPowerUsed();
 }
+
 
 bool C_GuiInterface::eventFilter(QObject *object, QEvent *event)
 {

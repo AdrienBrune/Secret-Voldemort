@@ -29,13 +29,13 @@ W_ScreenEndGame::~W_ScreenEndGame()
 
 void W_ScreenEndGame::onAnimate()
 {
-    if(mAnimationStep < ANIMATION_STEP_MAX)
+    if(mAnimationStep < SEG_ANIMATION_STEP_MAX)
     {
         mAnimationStep++;
         update();
     }
 
-    if(mAnimationStep == ANIMATION_STEP_MAX)
+    if(mAnimationStep == SEG_ANIMATION_STEP_MAX)
     {
         QTimer * timer = dynamic_cast<QTimer*>(sender());
         if(timer)
@@ -69,9 +69,9 @@ void W_ScreenEndGame::paintEvent(QPaintEvent *)
             return;
     }
 
-    if(mAnimationStep > ANIMATION_STEP_MAX/2.0)
+    if(mAnimationStep > SEG_ANIMATION_STEP_MAX/2.0)
     {
-        painter.setOpacity(0.4 + mAnimationStep/ANIMATION_STEP_MAX*0.6);
+        painter.setOpacity(0.4 + mAnimationStep/SEG_ANIMATION_STEP_MAX*0.6);
         painter.drawPixmap(rect(), QPixmap(QString(":/images/endGame_%1.png").arg(strFaction)));
     }
 };

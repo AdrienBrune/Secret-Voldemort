@@ -23,6 +23,7 @@ W_ScreenVote::W_ScreenVote(QWidget *parent)
     wLumosCard->setGeometry(getVoteCardPosition(0));
     wNoxCard->setGeometry(getVoteCardPosition(1));
     show();
+    C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
 }
 
 W_ScreenVote::~W_ScreenVote()

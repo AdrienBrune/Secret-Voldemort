@@ -18,6 +18,7 @@ W_ScreenMenu::W_ScreenMenu(QWidget *parent)
     ui->setupUi(this);
     setGeometry(0, 0, parent->width(), parent->height());
     show();
+    C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
 }
 
 W_ScreenMenu::~W_ScreenMenu()

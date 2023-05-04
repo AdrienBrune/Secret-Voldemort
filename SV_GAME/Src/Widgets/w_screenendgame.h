@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QPainter>
 
-#define ANIMATION_STEP_MAX  50.0
+#define SEG_ANIMATION_STEP_MAX  50.0
 
 class W_ScreenEndGame : public QWidget
 {

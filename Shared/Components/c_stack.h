@@ -3,31 +3,7 @@
 
 #include <QWidget>
 
-class C_LawCard
-{
-public:
-    enum E_FACTION
-    {
-        notDefined,
-        phenixOrder,
-        deathEater
-    };
-
-public:
-    C_LawCard(E_FACTION type):mType(type){};
-    ~C_LawCard(){};
-
-public:
-    const E_FACTION &getFaction()const{ return mType; };
-    void setFaction(const E_FACTION &type){ mType = type; };
-
-private:
-    E_FACTION mType;
-};
-
-
-
-
+#include "Widgets/Components/w_lawcard.h"
 
 class C_Stack : public QWidget
 {

@@ -45,7 +45,7 @@ public slots:
     void onNotify(QString string);
     /* Events triggered from board interactions */
     void onPlayerClicked(C_Player* player);
-    void onDrawLawCards();
+    void onLawCardDrawn();
     void onDiscardLawCard(C_LawCard::E_FACTION law);
     void onAskVeto();
     void onClairvoyancePowerUsed();

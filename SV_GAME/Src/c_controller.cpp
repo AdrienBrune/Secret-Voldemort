@@ -72,7 +72,7 @@ C_Controller::C_Controller(QWidget *parent)
     connect(mRemoteInterface, &C_RemoteInterfaceHandler::sig_disconnected, this, &C_Controller::onDisconnected);
     connect(mView, &C_GuiInterface::sig_playerClicked, this, &C_Controller::onPlayerClicked);
     connect(mView, &C_GuiInterface::sig_quitGame, this, &C_Controller::onQuitGame);
-    connect(mView, &C_GuiInterface::sig_draw, this, &C_Controller::onDrawLawCards);
+    connect(mView, &C_GuiInterface::sig_lawCardDrew, this, &C_Controller::onLawCardDrawn);
     connect(mView, &C_GuiInterface::sig_discard, this, &C_Controller::onDiscardLawCard);
     connect(mView, &C_GuiInterface::sig_askVeto, this, &C_Controller::onAskVeto);
     connect(mView, &C_GuiInterface::sig_clairvoyancePowerUsed, this, &C_Controller::onClairvoyancePowerUsed);
@@ -106,7 +106,7 @@ C_Controller::~C_Controller()
 
 /* Events from remote server commands */
 
-void C_Controller::Event_DirectorSelection(QByteArray data)
+void C_Controller::Event_DirectorSelection(QByteArray)
 {
     /* Hide potential opened screens */
     mView->quitAllScreen();
@@ -121,7 +121,7 @@ void C_Controller::Event_DirectorSelection(QByteArray data)
     me->getPosition() == C_Player::E_POSITION::Minister ? mView->enablePlayersInteraction(true) : mView->enablePlayersInteraction(false) ;
 }
 
-void C_Controller::Event_DirectorElection(QByteArray data)
+void C_Controller::Event_DirectorElection(QByteArray)
 {
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
@@ -134,7 +134,7 @@ void C_Controller::Event_DirectorElection(QByteArray data)
         mView->displayScreenVote();
 }
 
-void C_Controller::Event_MinisterDraw(QByteArray data)
+void C_Controller::Event_MinisterDraw(QByteArray)
 {
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
@@ -145,11 +145,11 @@ void C_Controller::Event_MinisterDraw(QByteArray data)
 
     if(me->getPosition() == C_Player::E_POSITION::Minister)
     {
-        mView->enableDrawing(true);
+        mView->displayScreenDrawPile();
     }
 }
 
-void C_Controller::Event_MinisterDiscard(QByteArray data)
+void C_Controller::Event_MinisterDiscard(QByteArray)
 {
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
@@ -160,11 +160,11 @@ void C_Controller::Event_MinisterDiscard(QByteArray data)
 
     if(me->getPosition() == C_Player::E_POSITION::Minister)
     {
-        mView->displayScreenLaws(3);
+        mView->displayScreenLawsMinister();
     }
 }
 
-void C_Controller::Event_DirectorDiscard(QByteArray data)
+void C_Controller::Event_DirectorDiscard(QByteArray)
 {
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
@@ -175,11 +175,11 @@ void C_Controller::Event_DirectorDiscard(QByteArray data)
 
     if(me->getPosition() == C_Player::E_POSITION::Director)
     {
-        mView->displayScreenLaws(2);
+        mView->displayScreenLawsDirector();
     }
 }
 
-void C_Controller::Event_DirectorAskedVeto(QByteArray data)
+void C_Controller::Event_DirectorAskedVeto(QByteArray)
 {
     C_Player *me = mPlayers->getMyPlayerInstance();
     if(!me)
@@ -202,7 +202,7 @@ void C_Controller::Event_DirectorAskedVeto(QByteArray data)
     }
 }
 
-void C_Controller::Event_PowerSubstituteMinister(QByteArray data)
+void C_Controller::Event_PowerSubstituteMinister(QByteArray)
 {
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::substituteMinister);
 
@@ -216,7 +216,7 @@ void C_Controller::Event_PowerSubstituteMinister(QByteArray data)
     me->getPosition() == C_Player::E_POSITION::Minister ? mView->enablePlayersInteraction(true) : mView->enablePlayersInteraction(false) ;
 }
 
-void C_Controller::Event_PowerClairvoyance(QByteArray data)
+void C_Controller::Event_PowerClairvoyance(QByteArray)
 {
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::clairvoyance);
 
@@ -230,12 +230,12 @@ void C_Controller::Event_PowerClairvoyance(QByteArray data)
     if(me->getPosition() == C_Player::E_POSITION::Minister)
     {
         QTimer::singleShot(TIMEOUT_SCREEN_POWER_TRIGGER + 500, [&](){
-            mView->displayScreenLaws(3, true);
+            mView->displayScreenLawsClairvoyance();
         });
     }
 }
 
-void C_Controller::Event_PowerSpying(QByteArray data)
+void C_Controller::Event_PowerSpying(QByteArray)
 {
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::spying);
 
@@ -249,7 +249,7 @@ void C_Controller::Event_PowerSpying(QByteArray data)
     me->getPosition() == C_Player::E_POSITION::Minister ? mView->enablePlayersInteraction(true) : mView->enablePlayersInteraction(false) ;
 }
 
-void C_Controller::Event_PowerAssassination(QByteArray data)
+void C_Controller::Event_PowerAssassination(QByteArray)
 {
     mView->displayScreenPowerUnlocked(C_LawBoard::E_POWER::assassination);
 
@@ -354,10 +354,8 @@ void C_Controller::onPlayerClicked(C_Player *player)
     }
 }
 
-void C_Controller::onDrawLawCards()
+void C_Controller::onLawCardDrawn()
 {
-    mView->enableDrawing(false);
-
     mRemoteInterface->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_Minister_drew));
 }
 
@@ -450,4 +448,3 @@ void C_Controller::keyPressEvent(QKeyEvent *event)
             C_RemoteInterfaceHandler::getInstance()->getClient()->sendMessage(new C_Message_Event(C_Message_Event::E_EVENT::CS_set_name, QByteArray(C_RemoteInterfaceHandler::getInstance()->getClient()->getName().toLatin1())));
     }
 }
-

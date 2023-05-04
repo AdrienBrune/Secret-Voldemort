@@ -4,8 +4,8 @@
 #include <QPushButton>
 #include <QPainter>
 
+#include "Widgets/Components/w_lawcard.h"
 #include "../../Shared/Components/c_player.h"
-#include "Widgets/w_screenlaws.h"
 #include "Handlers/c_soundhandler.h"
 
 class W_FactionCard : public QPushButton

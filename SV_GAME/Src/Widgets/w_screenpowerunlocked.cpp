@@ -61,7 +61,7 @@ void W_Banner::paintEvent(QPaintEvent *)
     painter.drawText(boundingArea, Qt::AlignTop|Qt::AlignRight, label);
 
     /* Draw locker animation */
-    if(mAnimationStep < ANIMATION_STEP_MAX)
+    if(mAnimationStep < SPU_ANIMATION_STEP_MAX)
     {
         /* Draw power image */
         painter.setBrush(QBrush(COLOR_WHITE));
@@ -69,7 +69,7 @@ void W_Banner::paintEvent(QPaintEvent *)
         painter.drawEllipse(iconArea);
         //painter.setBrush(QBrush(QColor(250,250,250,0)));
         //painter.setPen(QPen(COLOR_GREY, 12));
-        //painter.drawArc(QRect(iconArea.x()+12,iconArea.y()+12,iconArea.width()-24,iconArea.height()-24), 0, 16*mAnimationStep/ANIMATION_STEP_MAX*360.0);
+        //painter.drawArc(QRect(iconArea.x()+12,iconArea.y()+12,iconArea.width()-24,iconArea.height()-24), 0, 16*mAnimationStep/SPU_ANIMATION_STEP_MAX*360.0);
         /* Draw lock image */
         painter.drawPixmap(iconArea, QPixmap(QString(":/images/lock.png")));
     }

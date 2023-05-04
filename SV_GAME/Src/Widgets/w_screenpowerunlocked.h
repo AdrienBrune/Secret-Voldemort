@@ -10,7 +10,7 @@
 #include "Handlers/c_soundhandler.h"
 
 #define TIMEOUT_SCREEN_POWER_TRIGGER    7000
-#define ANIMATION_STEP_MAX  1.0
+#define SPU_ANIMATION_STEP_MAX  1.0
 
 class W_Banner : public QWidget
 {
@@ -39,12 +39,12 @@ public:
 private slots:
     void onAnimate()
     {
-        if(mAnimationStep < ANIMATION_STEP_MAX)
+        if(mAnimationStep < SPU_ANIMATION_STEP_MAX)
         {
             mAnimationStep++;
             update();
         }
-        if(mAnimationStep == ANIMATION_STEP_MAX)
+        if(mAnimationStep == SPU_ANIMATION_STEP_MAX)
         {
             QTimer *timer = dynamic_cast<QTimer*>(sender());
             if(timer)

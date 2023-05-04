@@ -12,8 +12,9 @@ INCLUDEPATH += $$PWD/$$PWD
 
 SOURCES += \
     Handlers/c_soundhandler.cpp \
+    Widgets/Components/w_lawcard.cpp \
     Widgets/w_screenendgame.cpp \
-    Widgets/w_screenlaws.cpp \
+    Widgets/w_screenlawdisplayed.cpp \
     Widgets/w_screenpowerunlocked.cpp \
     Widgets/w_screenspying.cpp \
     Widgets/w_screenvote.cpp \
@@ -46,9 +47,10 @@ SOURCES += \
 HEADERS += \
     ../../Shared/c_textdrawinghelper.h \
     Handlers/c_soundhandler.h \
+    Widgets/Components/w_lawcard.h \
     Widgets/w_messagebox.h \
     Widgets/w_screenendgame.h \
-    Widgets/w_screenlaws.h \
+    Widgets/w_screenlawdisplayed.h \
     Widgets/w_screenpowerunlocked.h \
     Widgets/w_screenspying.h \
     Widgets/w_screenvote.h \

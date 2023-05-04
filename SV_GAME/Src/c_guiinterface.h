@@ -16,7 +16,7 @@
 #include "Widgets/w_screenmenu.h"
 #include "Widgets/w_secretrole.h"
 #include "Widgets/w_screenvote.h"
-#include "Widgets/w_screenlaws.h"
+#include "Widgets/w_screenlawdisplayed.h"
 #include "Widgets/w_screenspying.h"
 #include "Widgets/w_screenpowerunlocked.h"
 #include "Widgets/w_screenendgame.h"
@@ -36,7 +36,8 @@ public:
 
 signals:
     void sig_playerClicked(C_Player*);
-    void sig_draw();
+    void sig_readyToDraw();
+    void sig_lawCardDrew();
     void sig_vote(W_VoteCard::E_VOTE);
     void sig_discard(C_LawCard::E_FACTION);
     void sig_askVeto();
@@ -51,12 +52,17 @@ public slots:
 public slots:
     void onQuitScreenMenu();
     void onQuitScreenVote(W_VoteCard::E_VOTE vote);
-    void onQuitScreenLaws(C_LawCard::E_FACTION faction);
+    void onQuitScreenLaws();
     void onAskVeto();
     void onQuitScreenSpying();
     void onQuitScreenPower(C_LawBoard::E_POWER power);
     void onQuitScreenEndGame();
     void onOpenSettings();
+
+private slots:
+    void onLawCardsDrawn();
+    void onLawDiscarded(W_LawCard*);
+    void onClairvoyanceDone();
 
 protected:
     void paintEvent(QPaintEvent *)override;
@@ -75,10 +81,12 @@ public:
 
 public:
     void enablePlayersInteraction(bool toggle);
-    void enableDrawing(bool toggle);
     void displayScreenMenu();
     void displayScreenVote();
-    void displayScreenLaws(quint8 cardNumberToShow, bool readOnly = false);
+    void displayScreenLawsMinister();
+    void displayScreenLawsDirector();
+    void displayScreenLawsClairvoyance();
+    void displayScreenDrawPile();
     void displayScreenSpying(C_Player *player);
     void displayScreenPowerUnlocked(C_LawBoard::E_POWER power);
     void displayScreenEndGame(C_LawCard::E_FACTION faction);
@@ -104,7 +112,7 @@ private:
 
     /* Foreground reduced opacity screens */
     W_ScreenVote *wScreenVote;
-    W_ScreenLaws *wScreenLaws;
+    W_ScreenLawDisplayed *wScreenLaws;
     W_ScreenSpying *wScreenSpying;
     W_ScreenPowerUnlocked *wScreenPower;
     W_ScreenMenu *wScreenMenu;
