@@ -6,7 +6,7 @@ cat .gitignore
 **/Release/MacOS/**.h
 **/Release/MacOS/**.cpp
 **/Release/MacOS/**.o
-**/Release/MacOS/release
+**/Release/MacOS/**.app
 
 **/Release/Windows/**.h
 **/Release/Windows/**.cpp
