@@ -17,6 +17,9 @@ public:
 signals:
     void sig_clicked(C_Player*);
 
+private slots:
+    void onActionRequested(bool request){ request ? mTimerLoop->start(100) : mTimerLoop->stop(); }
+
 public:
     const bool &getClickable()const{ return mClickable; };
     void setClickable(const bool &toggle){ mClickable = toggle; };
@@ -34,7 +37,8 @@ private:
     bool mHover;
     bool mClickable;
     qreal mGlobalOpacity;
-
+    QTimer *mTimerLoop;
+    quint16 mAnimationLoop;
 };
 
 #endif // W_PLAYER_H

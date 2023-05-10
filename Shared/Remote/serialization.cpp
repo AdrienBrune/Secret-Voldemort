@@ -17,14 +17,16 @@ QDebug operator<<(QDebug dbg, const C_Player &instance)
                   << "    Status   : " << instance.getRole() << "\n"
                   << "    Position : " << instance.getPosition() << "\n"
                   << "    voted    : " << instance.getFlagVote() << "\n"
+                  << "    vote     : " << instance.getVote() << "\n"
                   << "    focus    : " << instance.getFlagFocus() << "\n"
+                  << "    act req. : " << instance.getActionRequested() << "\n"
                   << "}\n";
     return dbg.maybeSpace();
 }
 
 QDataStream & operator<<(QDataStream & stream, const C_Player &player)
 {
-    return stream << player.getName() << player.getRole() << player.getStatus() << player.getPosition() << player.getFlagVote() << player.getFlagFocus();
+    return stream << player.getName() << player.getRole() << player.getStatus() << player.getPosition() << player.getVote() << player.getFlagVote() << player.getFlagFocus() << player.getActionRequested();
 }
 
 QDataStream & operator>>(QDataStream & stream, C_Player &instance)
@@ -33,15 +35,18 @@ QDataStream & operator>>(QDataStream & stream, C_Player &instance)
     C_Player::E_ROLE role;
     C_Player::E_STATUS status;
     C_Player::E_POSITION position;
-    bool flag, focus;
+    C_Player::E_VOTE vote;
+    bool flag, focus, actionRequested;
 
-    stream >> name >> role >> status >> position >> flag >> focus;
+    stream >> name >> role >> status >> position >> vote >> flag >> focus >> actionRequested;
     instance.setName(name);
     instance.setRole(role);
     instance.setStatus(status);
     instance.setPosition(position);
+    instance.setVote(vote);
     instance.setFlagVote(flag);
     instance.setFlagFocus(focus);
+    instance.setActionRequested(actionRequested);
 
     return stream;
 }

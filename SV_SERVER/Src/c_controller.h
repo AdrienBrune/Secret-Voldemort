@@ -20,13 +20,6 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class C_Controller; }
 QT_END_NAMESPACE
 
-enum E_VOTE
-{
-    notDefined,
-    lumos,
-    nox
-};
-
 struct S_VOTE_RESULTS{
     quint8 lumos = 0;
     quint8 nox = 0;
@@ -134,7 +127,7 @@ private:
     void MinisterEnterChaos();
     void prepareCurrentTurn();
     void prepareNextTurn();
-    E_VOTE voteResult();
+    C_Player::E_VOTE voteResult();
     void updateGUIPlayerList();
 
 private:
@@ -192,7 +185,7 @@ private:
 
     C_ServerTcp *mServer;
     QList<C_Player*> mPlayersSaved; // Disconnection-Reconnection backup
-    QList<E_VOTE> mVoteStack;
+    QList<C_Player::E_VOTE> mVoteStack;
     S_VOTE_RESULTS mVoteResults;
     C_Player *nextSubstituteMinister;
 

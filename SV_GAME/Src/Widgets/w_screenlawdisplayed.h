@@ -22,11 +22,16 @@ signals:
     void sig_askVeto();
     void sig_timeout();
 
+private slots:
+    void onConfirmSelection();
+    void onNewSelection();
+
 protected:
     void paintEvent(QPaintEvent*)override;
     void resizeEvent(QResizeEvent*)override;
 
 private:
+    void selectAll(){ for(quint8 i = 0; i < wLaws.size(); i++) wLaws[i]->setSelection(W_LawCard::E_SELECTION::selected); }
     QRect getLawCardPosition(quint8 index);
 
 private:
@@ -34,6 +39,7 @@ private:
     QList<W_LawCard*> wLaws;
     bool mEnableInteraction;
     QPushButton *mButtonVeto;
+    QPushButton *mButtonConfirm;
 };
 
 #endif // W_SCREENLAWDISPLAYED_H

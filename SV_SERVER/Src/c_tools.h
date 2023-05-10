@@ -21,8 +21,10 @@ public:
     static void setRoles(QList<C_Player*> *playerList);
     static void setNextPositions(QList<C_Player*> *playerList, C_Player *nextMinister = nullptr);
     static void removePositionsExceptMinister(QList<C_Player*> *playerList);
+    static void removeVote(QList<C_Player*> *playerList);
     static void removeFlagVote(QList<C_Player*> *playerList);
     static void removeFocusOnPlayers(QList<C_Player*>* playerList);
+    static void removeActionRequested(QList<C_Player*>* playerList);
     static C_Player *getPlayer(QList<C_Player*> *playerList, C_Player::E_POSITION position);
     static QList<C_Player*> getPlayerPlaying(QList<C_Player*> *playerList);
     static QList<C_Player*> getPlayerAlive(QList<C_Player*> *playerList);

@@ -7,10 +7,16 @@ C_Player::C_Player(QWidget *parent, C_TcpSocketAck *socket)
     , mRole(E_ROLE::notAttributed)
     , mStatus(E_STATUS::unconnected)
     , mPosition(E_POSITION::none)
+    , mVote(E_VOTE::noVote)
     , mFlagVote(false)
     , mFlagFocus(false)
+    , mActionRequested(false)
     , mSocket(socket)
+    , mTimer(nullptr)
 {
+    mTimer = new QTimer(this);
+    connect(mTimer, &QTimer::timeout, this, &C_Player::onHideVote);
+    mTimer->setSingleShot(true);
     if(socket)
     {
         connect(socket, &C_TcpSocketAck::sig_messageReceived, this, &C_Player::onMessageReceived);

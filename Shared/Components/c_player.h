@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QDataStream>
 #include <QByteArray>
+#include <QTimer>
 
 class C_TcpSocketAck;
 class C_Message;
@@ -51,6 +52,12 @@ public:
         Director
     };
 
+    enum E_VOTE{
+        noVote = 0,
+        lumos,
+        nox
+    };
+
 public:
     C_Player(QWidget *parent = nullptr, C_TcpSocketAck *socket = nullptr);
     ~C_Player();
@@ -58,9 +65,11 @@ public:
 signals:
     void sig_messageReceived(C_Message *, C_Player *);
     void sig_attributeChanged();
+    void sig_actionRequested(bool);
 
 private slots:
     void onMessageReceived(C_Message *message);
+    void onHideVote(){ setVote(E_VOTE::noVote); update(); }
 
 public:
     const QString &getName()const{ return mName; };
@@ -75,11 +84,39 @@ public:
     const E_POSITION &getPosition()const{ return mPosition; };
     void setPosition(const E_POSITION &position){ mPosition = position; emit sig_attributeChanged(); };
 
+    const E_VOTE &getVote()const{ return mVote; };
+    void setVote(const E_VOTE &vote){
+        mVote = vote;
+        if(mVote){
+            mTimer->stop();
+            update();
+        }
+        emit sig_attributeChanged();
+    };
+
     const bool &getFlagVote()const{ return mFlagVote; };
-    void setFlagVote(const bool &flag){ mFlagVote = flag; emit sig_attributeChanged(); };
+    void setFlagVote(const bool &flag){
+        mFlagVote = flag;
+        emit sig_attributeChanged();
+        if(!flag)
+        {
+            update();
+            mTimer->start(5000);
+        }
+    };
 
     const bool &getFlagFocus()const{ return mFlagFocus; };
     void setFlagFocus(const bool &flag){ mFlagFocus = flag; emit sig_attributeChanged(); };
+
+    const bool &getActionRequested()const{ return mActionRequested; };
+    void setActionRequested(const bool &actionRequested)
+    {
+        if(actionRequested && (mStatus == E_STATUS::dead || mStatus == E_STATUS::unconnected))
+            return;
+
+        mActionRequested = actionRequested;
+        emit sig_actionRequested(mActionRequested);
+    };
 
     C_TcpSocketAck *getSocket()const{ return mSocket; };
     void setSocket(C_TcpSocketAck *socket){ mSocket = socket; emit sig_attributeChanged(); };
@@ -93,9 +130,12 @@ protected:
     E_ROLE mRole;
     E_STATUS mStatus;
     E_POSITION mPosition;
+    E_VOTE mVote;
     bool mFlagVote;
     bool mFlagFocus;
+    bool mActionRequested;
     C_TcpSocketAck *mSocket;
+    QTimer *mTimer;
 };
 
 #endif // C_PLAYER_H

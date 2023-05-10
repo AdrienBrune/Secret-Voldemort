@@ -45,6 +45,7 @@ SOURCES += \
     ../../Shared/Components/c_electiontracker.cpp
 
 HEADERS += \
+    ../../Shared/Components/c_lawcard.h \
     ../../Shared/c_textdrawinghelper.h \
     Handlers/c_soundhandler.h \
     Widgets/Components/w_lawcard.h \
@@ -62,7 +63,6 @@ HEADERS += \
     Handlers/c_remoteinterfacehandler.h \
     Handlers/c_boardhandler.h \
     Handlers/c_gamehandler.h \
-    Widgets/w_gameboard.h \
     Widgets/w_playersmanagement.h \
     Widgets/w_screenmenu.h \
     Widgets/Components/w_stack.h \

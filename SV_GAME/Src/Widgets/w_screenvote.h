@@ -13,7 +13,7 @@ class W_VoteCard : public QPushButton
 public:
     enum E_VOTE
     {
-        notDefined,
+        noVote,
         lumos,
         nox
     };

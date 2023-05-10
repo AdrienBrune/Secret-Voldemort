@@ -118,6 +118,14 @@ void C_Tools::removePositionsExceptMinister(QList<C_Player*> *playerList)
     }
 }
 
+void C_Tools::removeVote(QList<C_Player*> *playerList)
+{
+    for(int i = 0; i < playerList->size(); i++)
+    {
+        (*playerList)[i]->setVote(C_Player::E_VOTE::noVote);
+    }
+}
+
 void C_Tools::removeFlagVote(QList<C_Player*> *playerList)
 {
     for(int i = 0; i < playerList->size(); i++)
@@ -131,6 +139,14 @@ void C_Tools::removeFocusOnPlayers(QList<C_Player*> *playerList)
     for(int i = 0; i < playerList->size(); i++)
     {
         (*playerList)[i]->setFlagFocus(false);
+    }
+}
+
+void C_Tools::removeActionRequested(QList<C_Player *> *playerList)
+{
+    for(int i = 0; i < playerList->size(); i++)
+    {
+        (*playerList)[i]->setActionRequested(false);
     }
 }
 

@@ -16,6 +16,7 @@ W_ScreenLawDisplayed::W_ScreenLawDisplayed(QWidget *parent, QList<C_LawCard> law
     , wLaws(QList<W_LawCard*>())
     , mEnableInteraction(enableInteraction)
     , mButtonVeto(nullptr)
+    , mButtonConfirm(nullptr)
 {
     setGeometry(0, 0, parent->width(), parent->height());
 
@@ -26,7 +27,7 @@ W_ScreenLawDisplayed::W_ScreenLawDisplayed(QWidget *parent, QList<C_LawCard> law
         for(int i = 0; i < lawsToDisplay.size(); i++)
         {
             wLaws.append(new W_LawCard(this, lawsToDisplay[i].getFaction(), mEnableInteraction));
-            connect(wLaws.last(), &W_LawCard::clicked, this, &W_ScreenLawDisplayed::sig_discard);
+            connect(wLaws.last(), &W_LawCard::clicked, this, &W_ScreenLawDisplayed::onNewSelection);
             wLaws.last()->setGeometry(getLawCardPosition(i));
         }
     }
@@ -52,7 +53,7 @@ W_ScreenLawDisplayed::W_ScreenLawDisplayed(QWidget *parent, QList<C_LawCard> law
                                        "QPushButton::pressed{background-color:rgba(250,250,250,120);}");
             mButtonVeto->setFont(QFont("Niagara Solid", 20));
             mButtonVeto->setText("Proposer un veto");
-            mButtonVeto->setGeometry((width()-mButtonVeto->width())/2, height()-50-20, 300, 50);
+            mButtonVeto->setGeometry((width()-mButtonVeto->width())/2, height()-50-20-50-20, 300, 50);
             connect(mButtonVeto, &QPushButton::clicked, this, &W_ScreenLawDisplayed::sig_askVeto);
         }
     }
@@ -64,6 +65,17 @@ W_ScreenLawDisplayed::W_ScreenLawDisplayed(QWidget *parent, QList<C_LawCard> law
         QTimer::singleShot(5000, this, [&](){ emit sig_timeout(); });
     }
 
+    // Add confirm button
+    mButtonConfirm = new QPushButton(this);
+    mButtonConfirm->setStyleSheet("QPushButton{color:white;background-color:rgba(250,250,250,80);padding:5px;}"
+                               "QPushButton::hover{background-color:rgba(250,250,250,100);}"
+                               "QPushButton::pressed{background-color:rgba(250,250,250,120);}");
+    mButtonConfirm->setFont(QFont("Niagara Solid", 20));
+    mButtonConfirm->setText("Confirmer");
+    mButtonConfirm->setGeometry((width()-mButtonConfirm->width())/2, height()-50-20, 300, 50);
+    connect(mButtonConfirm, &QPushButton::clicked, this, &W_ScreenLawDisplayed::onConfirmSelection);
+    mButtonConfirm->hide();
+
     show();
     C_SoundHandler::getInstance()->playSound(E_SOUNDS::screenOpen);
 }
@@ -71,6 +83,30 @@ W_ScreenLawDisplayed::W_ScreenLawDisplayed(QWidget *parent, QList<C_LawCard> law
 W_ScreenLawDisplayed::~W_ScreenLawDisplayed()
 {
 
+}
+
+void W_ScreenLawDisplayed::onConfirmSelection()
+{
+    for(W_LawCard *law : qAsConst(wLaws))
+    {
+        if(law->getSelection() == W_LawCard::E_SELECTION::notSelected)
+        {
+            C_SoundHandler::getInstance()->playSound(E_SOUNDS::cardSelection);
+            emit sig_discard(law);
+            return;
+        }
+    }
+}
+
+void W_ScreenLawDisplayed::onNewSelection()
+{
+    W_LawCard *law = dynamic_cast<W_LawCard*>(sender());
+    if(law)
+    {
+        selectAll();
+        law->setSelection(W_LawCard::E_SELECTION::notSelected);
+        mButtonConfirm->show();
+    }
 }
 
 void W_ScreenLawDisplayed::paintEvent(QPaintEvent*)
@@ -97,7 +133,9 @@ void W_ScreenLawDisplayed::resizeEvent(QResizeEvent*)
         wLaws.at(i)->setGeometry(getLawCardPosition(i));
     }
     if(mButtonVeto)
-        mButtonVeto->setGeometry((width()-mButtonVeto->width())/2, height()-50-20, 300, 50);
+        mButtonVeto->setGeometry((width()-mButtonVeto->width())/2, height()-50-20-50-20, 300, 50);
+    if(mButtonConfirm)
+        mButtonConfirm->setGeometry((width()-mButtonConfirm->width())/2, height()-50-20, 300, 50);
 }
 
 QRect W_ScreenLawDisplayed::getLawCardPosition(quint8 index)

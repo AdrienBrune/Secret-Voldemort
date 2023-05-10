@@ -8,16 +8,26 @@
 
 #define BOX_HEIGHT 100
 
+#define LOOP_ANIMATION_STEP (360.0/20.0)
+
 W_Player::W_Player(QWidget *parent)
     : C_Player(parent)
     , mHover(false)
     , mClickable(false)
     , mGlobalOpacity(1.0)
+    , mTimerLoop(nullptr)
+    , mAnimationLoop(0)
 {
     show();
     setAttribute(Qt::WA_Hover, true);
     setMinimumHeight(BOX_HEIGHT);
     setMaximumHeight(BOX_HEIGHT);
+    mTimerLoop = new QTimer(this);
+    connect(mTimerLoop, &QTimer::timeout, this, [&](){
+        mAnimationLoop = static_cast<quint16>(mAnimationLoop + LOOP_ANIMATION_STEP) % 360;
+        update();
+    });
+    connect(this, &C_Player::sig_actionRequested, this, &W_Player::onActionRequested);
 }
 
 W_Player::~W_Player()
@@ -124,6 +134,10 @@ void W_Player::paintEvent(QPaintEvent *)
     QPen penWhite(QColor(220, 220, 220), PEN_WIDTH);
     // Black text pen.
     QPen penBlack(QColor(40, 40, 40), PEN_WIDTH);
+
+
+    if(!C_PlayersHandler::getInstance())
+        return;
 
     // Get my player instance
     C_Player *myPlayerInstance = C_PlayersHandler::getInstance()->getMyPlayerInstance();
@@ -244,6 +258,9 @@ void W_Player::paintEvent(QPaintEvent *)
                 painter.setFont(QFont("Times New Roman", 8));
                 painter.drawText(labelRole, Qt::AlignCenter, "En attente");
                 break;
+
+            default:
+                break;
         }
         return;
     }
@@ -355,9 +372,34 @@ void W_Player::paintEvent(QPaintEvent *)
     /// Vote drawing
     if(mFlagVote)
     {
-        painter.setBrush(QColor(46, 250, 180));
-        painter.setPen(QPen(QColor(20, 20, 20), 1));
-        painter.drawRect(QRect(box.x() + box.width()*9/10 + (box.width()/10)/3, box.y(), (box.width()/10)/3, box.height()));
+//        painter.setBrush(QColor(46, 250, 180));
+//        painter.setPen(QPen(QColor(20, 20, 20), 1));
+//        painter.drawRect(QRect(box.x() + box.width()*9/10 + (box.width()/10)/3, box.y(), (box.width()/10)/3, box.height()));
+    }
+    else
+    {
+        if(mVote)
+        {
+            painter.setBrush(QColor(0,0,0,0));
+            switch(mVote)
+            {
+                case E_VOTE::lumos:
+                    painter.setPen(QPen(QColor(40, 120, 40), 10));
+                    break;
+
+                case E_VOTE::nox:
+                    painter.setPen(QPen(QColor(120, 40, 40), 10));
+                    break;
+
+                default:
+                    painter.setPen(QPen(QColor(0,0,0,0), 0));
+                    break;
+            }
+            QPoint p1(box.x() + box.width() - box.height()/2, box.y()),
+                   p2(box.x() + box.width(), box.y() + box.height()/2);
+            painter.drawLine(p1, p2);
+            //painter.drawPixmap(QRect(box.x() + box.width() - 1.44*box.height()/2 - 5, box.y()+ box.height()/4, 1.44*box.height()/2, box.height()/2), QPixmap(QString(":/images/Vote_%1.png").arg(mVote == E_VOTE::lumos ? "Lumos" : mVote == E_VOTE::nox ? "Nox" : "")));
+        }
     }
 
     /// Power drawing
@@ -394,5 +436,17 @@ void W_Player::paintEvent(QPaintEvent *)
                 }
             }
         }
+    }
+
+    /// Draw action requested
+    if(mActionRequested)
+    {
+        QRect loopArea(box.x() + 10, box.y() + box.height()/4, box.height()/2, box.height()/2);
+        painter.setBrush(QBrush(QColor(0,0,0,0)));
+        painter.setPen(QPen(QColor(215, 153, 44), 4));
+        painter.setOpacity(0.4);
+        painter.drawEllipse(loopArea);
+        painter.setOpacity(1);
+        painter.drawArc(loopArea, mAnimationLoop - 30 > 0 ? 16*(mAnimationLoop-30) : 0, 16*mAnimationLoop);
     }
 }

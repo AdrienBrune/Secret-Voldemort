@@ -37,6 +37,7 @@ HEADERS += \
     ../../Shared/Components/c_player.h \
     ../../Shared/Components/c_electiontracker.h \
     ../../Shared/Remote/c_tcpsocketack.h \
+    ../../Shared/Components/c_lawcard.h \
     c_tools.h
 
 FORMS += \

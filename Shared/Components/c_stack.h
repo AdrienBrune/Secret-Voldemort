@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "Widgets/Components/w_lawcard.h"
+#include "../../Shared/Components/c_lawcard.h"
 
 class C_Stack : public QWidget
 {

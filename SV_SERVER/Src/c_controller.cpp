@@ -76,6 +76,11 @@ void C_Controller::onEvent(C_Message_Event::E_EVENT event, C_Player *player, con
 
 void C_Controller::EVENT_DirectorSelected(C_Player *, const QByteArray &data)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    for(int i = 0; i < mPlayers.size(); i++)
+        mPlayers[i]->setActionRequested(true);
+
     if(!data.size())
     {
         LOG_DBG("Error data received empty");
@@ -94,6 +99,7 @@ void C_Controller::EVENT_DirectorSelected(C_Player *, const QByteArray &data)
     mVoteResults.lumos = 0;
     mVoteResults.nox = 0;
     mVoteStack.clear();
+    C_Tools::removeVote(&mPlayers);
 
     addNextState(new C_NextStep(E_ST::st_directorElectionBegin));
 }
@@ -103,14 +109,23 @@ void C_Controller::EVENT_PlayerVoted(C_Player *player, const QByteArray &data)
     quint8 vote;
     QDataStream stream(data);
 
+    // Update action requested
+    player->setActionRequested(false);
+
     player->setFlagVote(true);
     sendUpdatedGameToPlayers();
 
     stream >> vote;
-    mVoteStack.append(static_cast<E_VOTE>(vote));
+    player->setVote(static_cast<C_Player::E_VOTE>(vote));
+    mVoteStack.append(static_cast<C_Player::E_VOTE>(vote));
     switch(voteResult())
     {
-    case E_VOTE::lumos:
+    case C_Player::E_VOTE::lumos:
+        // Update action requested
+        C_Tools::removeActionRequested(&mPlayers);
+        if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+            C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
+
         addNextState(new C_NextStep(E_ST::st_voteResult));
         C_Tools::getFocusedPlayer(&mPlayers)->setPosition(C_Player::E_POSITION::Director);
         C_Tools::getFocusedPlayer(&mPlayers)->setFlagFocus(false);
@@ -124,7 +139,10 @@ void C_Controller::EVENT_PlayerVoted(C_Player *player, const QByteArray &data)
             addNextState(new C_NextStep(E_ST::st_voteResultLumos, DEFAULT_TIME_BEETWEEN_STEP));
         break;
 
-    case E_VOTE::nox:
+    case C_Player::E_VOTE::nox:
+        // Update action requested
+        C_Tools::removeActionRequested(&mPlayers);
+
         addNextState(new C_NextStep(E_ST::st_voteResult));
         C_Tools::removeFlagVote(&mPlayers);
 
@@ -150,6 +168,11 @@ void C_Controller::EVENT_PlayerVoted(C_Player *player, const QByteArray &data)
 
 void C_Controller::EVENT_MinisterDrew(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
+
     addNextState(new C_NextStep(E_ST::st_ministerDiscard));
 }
 
@@ -157,6 +180,11 @@ void C_Controller::EVENT_MinisterDiscarded(C_Player *, const QByteArray &data)
 {
     quint8 law;
     QDataStream stream(data);
+
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director)->setActionRequested(true);
 
     if(mStack->getStack().size() < 3 || mStack->getStack().size() < 3)
     {
@@ -182,6 +210,9 @@ void C_Controller::EVENT_DirectorDiscarded(C_Player *, const QByteArray &data)
     quint8 law;
     QDataStream stream(data);
     C_LawBoard *lawBoard = nullptr;
+
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
 
     if(mStack->getStack().size() < 2 || mStack->getStack().size() < 2)
     {
@@ -214,16 +245,30 @@ void C_Controller::EVENT_DirectorDiscarded(C_Player *, const QByteArray &data)
         {
             addNextState(new C_NextStep(st_endOfTurn, DEFAULT_TIME_BEETWEEN_STEP));
         }
+        else
+        {
+            // Update action requested
+            if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+                C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
+        }
     }
 }
 
 void C_Controller::EVENT_DirectorAskedVeto(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
+
     addNextState(new C_NextStep(st_directorAskedVeto));
 }
 
 void C_Controller::EVENT_MinisterAcceptedVeto(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+
     addNextState(new C_NextStep(st_ministerAcceptedVeto));
 
     mElectionTracker->setCounter(mElectionTracker->getCounter() + 1);
@@ -239,6 +284,11 @@ void C_Controller::EVENT_MinisterAcceptedVeto(C_Player *, const QByteArray &)
 
 void C_Controller::EVENT_MinisterRefusedVeto(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director)->setActionRequested(true);
+
     addNextState(new C_NextStep(st_ministerRefusedVeto));
 }
 
@@ -246,6 +296,9 @@ void C_Controller::EVENT_PowerSubstituteMinisterSelected(C_Player *, const QByte
 {
     quint8 playerIndex;
     QDataStream stream(data);
+
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
 
     C_Tools::removeFocusOnPlayers(&mPlayers);
     stream >> playerIndex;
@@ -264,6 +317,9 @@ void C_Controller::EVENT_PowerSubstituteMinisterSelected(C_Player *, const QByte
 
 void C_Controller::EVENT_PowerClairvoyanceUsed(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+
     addNextState(new C_NextStep(st_ministerClairvoyanceCarriedOut));
     addNextState(new C_NextStep(st_endOfTurn, DEFAULT_TIME_BEETWEEN_STEP));
 }
@@ -288,6 +344,9 @@ void C_Controller::EVENT_PowerSpyingInProgress(C_Player *, const QByteArray &dat
 
 void C_Controller::EVENT_PowerSpyingCarriedOut(C_Player *, const QByteArray &)
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+
     addNextState(new C_NextStep(E_ST::st_playerSpied));
     addNextState(new C_NextStep(E_ST::st_endOfTurn, DEFAULT_TIME_BEETWEEN_STEP));
 }
@@ -296,6 +355,9 @@ void C_Controller::EVENT_PowerPlayerToAssassinSelected(C_Player *, const QByteAr
 {
     quint8 playerIndex;
     QDataStream stream(data);
+
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
 
     C_Tools::removeFocusOnPlayers(&mPlayers);
     stream >> playerIndex;
@@ -504,6 +566,7 @@ void C_Controller::onMachineState()
         break;
 
     case E_ST::st_gameFinished:
+        C_Tools::removeActionRequested(&mPlayers);
         updateGameState(QString("La partie est terminée"), C_Message_Event::SC_game_finished);
         break;
 
@@ -592,6 +655,7 @@ void C_Controller::initGame()
         delete mPlayersSaved.takeLast();
     // Remove votes on stack
     mVoteStack.clear();
+    C_Tools::removeVote(&mPlayers);
     // Shuffle stack
     mStack->reshuffleStack();
     // Remove law voted from boards
@@ -666,10 +730,15 @@ void C_Controller::prepareCurrentTurn()
 {
     C_Tools::removeFocusOnPlayers(&mPlayers);
     C_Tools::removeFlagVote(&mPlayers);
+    C_Tools::removeVote(&mPlayers);
     nextSubstituteMinister = nullptr;
     mVoteResults.lumos = 0;
     mVoteResults.nox = 0;
     mVoteResults.voteNumber = 0;
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
 }
 
 void C_Controller::prepareNextTurn()
@@ -684,22 +753,22 @@ void C_Controller::prepareNextTurn()
     nextSubstituteMinister = nullptr;
 }
 
-E_VOTE C_Controller::voteResult()
+C_Player::E_VOTE C_Controller::voteResult()
 {
     mVoteResults.voteNumber = 0;
     for(C_Player *player : qAsConst(mPlayers))
         if(player->getStatus() == C_Player::E_STATUS::playing)
             mVoteResults.voteNumber++;
     if(mVoteStack.size() < mVoteResults.voteNumber)
-        return E_VOTE::notDefined;
+        return C_Player::E_VOTE::noVote;
     else
     {
         /* Everyone has voted */
         while(!mVoteStack.isEmpty())
         {
-            mVoteStack.takeLast() == E_VOTE::lumos ? mVoteResults.lumos++ : mVoteResults.nox++;
+            mVoteStack.takeLast() == C_Player::E_VOTE::lumos ? mVoteResults.lumos++ : mVoteResults.nox++;
         }
-        return (mVoteResults.lumos > mVoteResults.nox) ? E_VOTE::lumos : E_VOTE::nox;
+        return (mVoteResults.lumos > mVoteResults.nox) ? C_Player::E_VOTE::lumos : C_Player::E_VOTE::nox;
     }
 }
 
@@ -800,6 +869,11 @@ void C_Controller::onPrintLog(QString message)
 
 void C_Controller::on_buttonRestartTurn_clicked()
 {
+    // Update action requested
+    C_Tools::removeActionRequested(&mPlayers);
+    if(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister))
+        C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Minister)->setActionRequested(true);
+
     if(mGameTracker->getEvent() == C_Message_Event::E_EVENT::ApplicationStarted
     || mGameTracker->getEvent() == C_Message_Event::E_EVENT::SC_game_finished)
     {
