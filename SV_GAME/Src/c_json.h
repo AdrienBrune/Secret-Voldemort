@@ -7,19 +7,32 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QStandardPaths>
+#include <QDir>
 
 class C_Json
 {
+
+private:
+#ifdef __APPLE__
+    QString static getConfigFileName(){ return QString("config.json"); }
+    QString static getConfigFilePath()
+    {
+        QString path(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+        QDir dirPath(path);
+        dirPath.mkdir("Secret_Voldemort_Save");
+        return QString(path + "/Secret_Voldemort_Save/" + getConfigFileName());
+    }
+#else
+    QString static getConfigFileName(){ return QString("config.json"); }
+    QString static getConfigFilePath(){ return QString(getConfigFileName()); }
+#endif
 
 public:
     void static saveParameter(const QString &paramName, const QString &value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -51,11 +64,7 @@ public:
     void static saveParameter(const QString &paramName, const double &value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -87,11 +96,7 @@ public:
     void static saveParameter(const QString &paramName, const bool &value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
 
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
@@ -123,11 +128,8 @@ public:
     void static loadParameter(const QString &paramName, QString *value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
+
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");
@@ -150,11 +152,8 @@ public:
     void static loadParameter(const QString &paramName, double *value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
+
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");
@@ -177,11 +176,8 @@ public:
     void static loadParameter(const QString &paramName, bool *value)
     {
         QString fileContent;
-#ifdef __APPLE__
-        QFile file("../config.json");
-#else
-        QFile file("config.json");
-#endif
+        QFile file(getConfigFilePath());
+
         if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             LOG_DBG("Config file not found");
