@@ -29,6 +29,26 @@ private:
 #endif
 
 public:
+    void static initConfigFile()
+    {
+        QString fileContent;
+        QFile file(getConfigFilePath());
+
+        if(!file.open(QIODevice::ReadOnly))
+        {
+            LOG_DBG("Config file not found, file initialization ...");
+            file.open(QIODevice::WriteOnly | QIODevice::Text);
+            file.write("{\n"
+                            "\t\"Enable music\": true,\n"
+                            "\t\"Enable sounds\": true,\n"
+                            "\t\"IP\": \"127.0.0.1\",\n"
+                            "\t\"Name\": \"MyName\",\n"
+                            "\t\"Port\": 30000,\n"
+                            "\t\"Volume\": 50\n"
+                        "}");
+            file.close();
+        }
+    }
     void static saveParameter(const QString &paramName, const QString &value)
     {
         QString fileContent;

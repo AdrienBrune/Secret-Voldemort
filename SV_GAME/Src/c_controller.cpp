@@ -4,6 +4,7 @@
 #include "Widgets/w_messagebox.h"
 
 #include <QFontDatabase>
+#include <c_json.h>
 
 //#define LOOP_CONNECTION
 
@@ -27,25 +28,7 @@ C_Controller::C_Controller(QWidget *parent)
     setCursor(cursor);
 
     /* Config file creation if not found */
-#ifdef __APPLE__
-    QFile file("../config.json");
-#else
-    QFile file("config.json");
-#endif
-    if(!file.open(QIODevice::ReadOnly))
-    {
-        LOG_DBG("Config file not found, file initialization ...");
-        file.open(QIODevice::WriteOnly | QIODevice::Text);
-        file.write("{\n"
-                        "\t\"Enable music\": true,\n"
-                        "\t\"Enable sounds\": true,\n"
-                        "\t\"IP\": \"127.0.0.1\",\n"
-                        "\t\"Name\": \"MyName\",\n"
-                        "\t\"Port\": 30000,\n"
-                        "\t\"Volume\": 100\n"
-                    "}");
-        file.close();
-    }
+    C_Json::initConfigFile();
 
 
     mRemoteInterface = C_RemoteInterfaceHandler::getInstance(); // Instance creation
