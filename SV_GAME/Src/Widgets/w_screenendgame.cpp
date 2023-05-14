@@ -71,7 +71,7 @@ void W_ScreenEndGame::paintEvent(QPaintEvent *)
 
     if(mAnimationStep > SEG_ANIMATION_STEP_MAX/2.0)
     {
-        painter.setOpacity(0.4 + mAnimationStep/SEG_ANIMATION_STEP_MAX*0.6);
+        painter.setOpacity(1.0);
         painter.drawPixmap(rect(), QPixmap(QString(":/images/endGame_%1.png").arg(strFaction)));
     }
 };
