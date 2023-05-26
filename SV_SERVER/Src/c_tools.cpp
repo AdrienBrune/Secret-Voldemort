@@ -80,21 +80,10 @@ void C_Tools::setNextPositions(QList<C_Player*> *playerList, C_Player *nextMinis
                     }while((*playerList)[indexMinister]->getStatus() != C_Player::E_STATUS::playing);
                 }
             }
-            if((*playerList).size() > 5)
-                (*playerList)[i]->setPosition(C_Player::E_POSITION::exMinister);
-            else
-                (*playerList)[i]->setPosition(C_Player::E_POSITION::none);
-            break;
-
-        case C_Player::E_POSITION::Director:
-            (*playerList)[i]->setPosition(C_Player::E_POSITION::exDirector);
-            break;
-
-        case C_Player::E_POSITION::exMinister:
             (*playerList)[i]->setPosition(C_Player::E_POSITION::none);
             break;
 
-        case C_Player::E_POSITION::exDirector:
+        case C_Player::E_POSITION::Director:
             (*playerList)[i]->setPosition(C_Player::E_POSITION::none);
             break;
 
@@ -147,6 +136,33 @@ void C_Tools::removeActionRequested(QList<C_Player *> *playerList)
     for(int i = 0; i < playerList->size(); i++)
     {
         (*playerList)[i]->setActionRequested(false);
+    }
+}
+
+void C_Tools::resetPlayersEligibility(QList<C_Player *> *playerList)
+{
+    for(int i = 0; i < playerList->size(); i++)
+    {
+        (*playerList)[i]->setEligibility(true);
+    }
+}
+
+void C_Tools::updatePlayersEligibility(QList<C_Player *> *playerList)
+{
+    for(int i = 0; i < playerList->size(); i++)
+    {
+        if((*playerList)[i]->getPosition() == C_Player::E_POSITION::Director)
+        {
+            (*playerList)[i]->setEligibility(false);
+        }
+        else if((*playerList)[i]->getPosition() == C_Player::E_POSITION::Minister && C_Tools::getPlayerPlaying(playerList).size() > 5)
+        {
+            (*playerList)[i]->setEligibility(false);
+        }
+        else
+        {
+            (*playerList)[i]->setEligibility(true);
+        }
     }
 }
 

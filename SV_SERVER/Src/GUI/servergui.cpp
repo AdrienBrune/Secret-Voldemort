@@ -142,7 +142,7 @@ void GUI_Player::paintEvent(QPaintEvent *)
         if(mPlayer->getPosition() != C_Player::E_POSITION::none)
         {
             boundingArea.setRect(box_background.x()+box_background.width()+5, box_background.y()+10, width()-box_background.width()-10, box_background.height()-20);
-            if(mPlayer->getPosition() == C_Player::E_POSITION::exDirector || mPlayer->getPosition() == C_Player::E_POSITION::exDirector)
+            if(!mPlayer->getEligibility())
                 painter.setOpacity(0.7);
             painter.drawPixmap(boundingArea, QPixmap(QString(":/images/easel_%1").arg(gPositionsStr[mPlayer->getPosition()])));
             painter.setOpacity(1);

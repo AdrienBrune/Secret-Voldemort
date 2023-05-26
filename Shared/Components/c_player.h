@@ -46,8 +46,6 @@ public:
 
     enum E_POSITION{
         none = 0,
-        exMinister,
-        exDirector,
         Minister,
         Director
     };
@@ -83,6 +81,9 @@ public:
 
     const E_POSITION &getPosition()const{ return mPosition; };
     void setPosition(const E_POSITION &position){ mPosition = position; emit sig_attributeChanged(); };
+
+    const bool &getEligibility()const{ return mEligible; };
+    void setEligibility(const bool &eligible){ mEligible = eligible; emit sig_attributeChanged(); };
 
     const E_VOTE &getVote()const{ return mVote; };
     void setVote(const E_VOTE &vote){
@@ -130,6 +131,7 @@ protected:
     E_ROLE mRole;
     E_STATUS mStatus;
     E_POSITION mPosition;
+    bool mEligible;
     E_VOTE mVote;
     bool mFlagVote;
     bool mFlagFocus;

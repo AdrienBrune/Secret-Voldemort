@@ -130,6 +130,7 @@ void C_Controller::EVENT_PlayerVoted(C_Player *player, const QByteArray &data)
         C_Tools::getFocusedPlayer(&mPlayers)->setPosition(C_Player::E_POSITION::Director);
         C_Tools::getFocusedPlayer(&mPlayers)->setFlagFocus(false);
         C_Tools::removeFlagVote(&mPlayers);
+        C_Tools::updatePlayersEligibility(&mPlayers);
         if(mDeathEaterBoard->getCardsOnBoard() > 2 && IS_VOLDEMORT(C_Tools::getPlayer(&mPlayers, C_Player::E_POSITION::Director)))
         {
             addNextState(new C_NextStep(E_ST::st_voteVoldemortElected, DEFAULT_TIME_BEETWEEN_STEP));
@@ -567,6 +568,7 @@ void C_Controller::onMachineState()
 
     case E_ST::st_gameFinished:
         C_Tools::removeActionRequested(&mPlayers);
+        C_Tools::resetPlayersEligibility(&mPlayers);
         updateGameState(QString("La partie est terminée"), C_Message_Event::SC_game_finished);
         break;
 
@@ -680,6 +682,7 @@ void C_Controller::initGame()
     // Link roles to players
     C_Tools::setRoles(&mPlayers);
     // Minister selection
+    C_Tools::resetPlayersEligibility(&mPlayers);
     mPlayers[QRandomGenerator().global()->bounded(mPlayers.size())]->setPosition(C_Player::E_POSITION::Minister);
 
     clearStepQueue();
@@ -721,6 +724,7 @@ int C_Controller::checkForPower()
 
 void C_Controller::MinisterEnterChaos()
 {
+    C_Tools::resetPlayersEligibility(&mPlayers);
     addNextState(new C_NextStep(st_ministryEnterChaos, DEFAULT_TIME_BEETWEEN_STEP));
     addNextState(new C_NextStep(st_everyoneCouldBeNextDirector, DEFAULT_TIME_BEETWEEN_STEP));
     addNextState(new C_NextStep(st_lawOnTopOfThePileVoted, DEFAULT_TIME_BEETWEEN_STEP));

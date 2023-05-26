@@ -102,28 +102,6 @@ C_Player *C_PlayersHandler::getDirector()const
     return nullptr;
 }
 
-C_Player *C_PlayersHandler::getExMinister()const
-{
-    for(C_Player *player : mPlayers)
-    {
-        if(player->getPosition() == C_Player::E_POSITION::exMinister)
-            return player;
-    }
-
-    return nullptr;
-}
-
-C_Player *C_PlayersHandler::getExDirector()const
-{
-    for(C_Player *player : mPlayers)
-    {
-        if(player->getPosition() == C_Player::E_POSITION::exDirector)
-            return player;
-    }
-
-    return nullptr;
-}
-
 C_Player *C_PlayersHandler::getPlayerFocus() const
 {
     for(C_Player *player : mPlayers)

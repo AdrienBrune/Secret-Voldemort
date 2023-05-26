@@ -25,6 +25,8 @@ public:
     static void removeFlagVote(QList<C_Player*> *playerList);
     static void removeFocusOnPlayers(QList<C_Player*>* playerList);
     static void removeActionRequested(QList<C_Player*>* playerList);
+    static void resetPlayersEligibility(QList<C_Player*>* playerList);
+    static void updatePlayersEligibility(QList<C_Player*>* playerList);
     static C_Player *getPlayer(QList<C_Player*> *playerList, C_Player::E_POSITION position);
     static QList<C_Player*> getPlayerPlaying(QList<C_Player*> *playerList);
     static QList<C_Player*> getPlayerAlive(QList<C_Player*> *playerList);

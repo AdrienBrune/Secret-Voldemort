@@ -66,8 +66,8 @@ void W_Player::mousePressEvent(QMouseEvent *)
                 // Check for specific event - Don't allow interactions on everyone
                 if(gameEvent == C_Message_Event::E_EVENT::SC_Director_selection_begin)
                 {
-                    // Check for exMinister/exDirector - Can't interact with them
-                    if(mPosition != exDirector && (mPosition != exMinister || C_PlayersHandler::getInstance()->getPlayers()->size() <= 5))
+                    // Check for ex elected Minister/Director - Can't interact with them
+                    if(mEligible)
                     {
                         emit sig_clicked(this);
                     }
@@ -167,22 +167,17 @@ void W_Player::paintEvent(QPaintEvent *)
                 // Check for specific event - Don't allow interactions on everyone
                 if(gameEvent == C_Message_Event::E_EVENT::SC_Director_selection_begin)
                 {
-                    // Check for exMinister/exDirector - Can't interact with them
-                    if(mPosition != exDirector && (mPosition != exMinister || C_PlayersHandler::getInstance()->getPlayers()->size() <= 5))
+                    // Check for ex elected Minister/Director - Can't interact with them
+                    if(mEligible)
                     {
                         box = QRect(BIG_BOX);
                     }
                 }
                 else
                 {
+                    // Power Interaction
                     box = QRect(BIG_BOX);
                 }
-//                else if(gameEvent == C_Message_Event::E_EVENT::SC_power_assassination
-//                     || gameEvent == C_Message_Event::E_EVENT::SC_power_spying
-//                     || gameEvent == C_Message_Event::E_EVENT::SC_power_substitute_Minister)
-//                {
-//                    box = QRect(BIG_BOX);
-//                }
             }
         }
     }
@@ -343,19 +338,13 @@ void W_Player::paintEvent(QPaintEvent *)
                     painter.drawText(labelRole, Qt::AlignCenter, "Directeur de Poudlard");
                     break;
 
-                case exMinister:
-                    painter.setPen(penPlayer);
-                    painter.drawText(labelRole, Qt::AlignCenter, "Vice-Ministre");
-                    break;
-
-                case exDirector:
-                    painter.setPen(penPlayer);
-                    painter.drawText(labelRole, Qt::AlignCenter, "Vice-Directeur");
-                    break;
-
                 default:
+                    if(!mEligible)
+                    {
+                        painter.setPen(penPlayer);
+                        painter.drawText(labelRole, Qt::AlignCenter, "non-éligible");
+                    }
                     painter.setPen(penPlayer);
-                    //painter.drawText(labelRole, Qt::AlignCenter, "Moldu");
                     break;
             }
             break;
@@ -370,13 +359,7 @@ void W_Player::paintEvent(QPaintEvent *)
     painter.drawText(labelName, Qt::AlignCenter, mName);
 
     /// Vote drawing
-    if(mFlagVote)
-    {
-//        painter.setBrush(QColor(46, 250, 180));
-//        painter.setPen(QPen(QColor(20, 20, 20), 1));
-//        painter.drawRect(QRect(box.x() + box.width()*9/10 + (box.width()/10)/3, box.y(), (box.width()/10)/3, box.height()));
-    }
-    else
+    if(!mFlagVote)
     {
         if(mVote)
         {
@@ -398,7 +381,6 @@ void W_Player::paintEvent(QPaintEvent *)
             QPoint p1(box.x() + box.width() - box.height()/2, box.y()),
                    p2(box.x() + box.width(), box.y() + box.height()/2);
             painter.drawLine(p1, p2);
-            //painter.drawPixmap(QRect(box.x() + box.width() - 1.44*box.height()/2 - 5, box.y()+ box.height()/4, 1.44*box.height()/2, box.height()/2), QPixmap(QString(":/images/Vote_%1.png").arg(mVote == E_VOTE::lumos ? "Lumos" : mVote == E_VOTE::nox ? "Nox" : "")));
         }
     }
 

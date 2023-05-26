@@ -44,8 +44,6 @@ public:
     C_Player *getMyPlayerInstance()const;
     C_Player *getMinister()const;
     C_Player *getDirector()const;
-    C_Player *getExMinister()const;
-    C_Player *getExDirector()const;
     C_Player *getPlayerFocus()const;
     QList<C_Player*> getDeathEaterTeam()const;
     quint8 getPlayerIdentifier(C_Player *player)const;

@@ -110,12 +110,11 @@ private slots:
     void EVENT_PowerPlayerToAssassinSelected(C_Player *player = nullptr, const QByteArray &data = nullptr);
     void EVENT_SetPlayerName(C_Player *player = nullptr, const QByteArray &data = nullptr);
 
-    void on_buttonRestartTurn_clicked();
-
 private:
     void onMachineState();
     void addNextState(C_NextStep *nextStep);
     void clearStepQueue();
+    void on_buttonRestartTurn_clicked();
 
 private:
     void updateGameState(QString notification, C_Message_Event::E_EVENT event = C_Message_Event::E_EVENT::ApplicationStarted, C_Player *player = nullptr);

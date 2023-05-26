@@ -2,7 +2,7 @@
 
 <ul>
 <li>Creator : BRUNE Adrien</li>
-<li>Version : 1.0.3</li>
+<li>Version : 1.0.4</li>
 <li>Date : 01/04/2023</li>
 </ul>
 
