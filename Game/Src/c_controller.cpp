@@ -23,6 +23,7 @@ C_Controller::C_Controller(QWidget *parent)
 
     QFontDatabase::addApplicationFont(":/fonts/font_germania.ttf");
     QFontDatabase::addApplicationFont(":/fonts/font_harrypotter.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Hogwarts.ttf");
 
     QCursor cursor(QPixmap(":/images/custom_cursor.png"), 20, 20);
     setCursor(cursor);

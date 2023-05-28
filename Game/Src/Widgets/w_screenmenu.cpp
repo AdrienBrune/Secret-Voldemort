@@ -79,7 +79,10 @@ void W_ScreenMenu::onCloseSettings()
 
 
 
-
+#define TXT_DISCONNECTED    "(deconnecte)"
+#define TXT_CONNECTED       "(connecte)"
+#define CLR_CONNECTED       "QLabel{color:#50EC8B;}"
+#define CLR_DISCONNECTED    "QLabel{color:#EC6850;}"
 
 W_ScreenSettings::W_ScreenSettings(QWidget *parent)
     : QWidget(parent)
@@ -93,7 +96,8 @@ W_ScreenSettings::W_ScreenSettings(QWidget *parent)
     ui->volumeSlider->setValue(C_SoundHandler::getInstance()->getGeneralSound());
     ui->input_music->setChecked(C_SoundHandler::getInstance()->getEnableMusic());
     ui->input_sounds->setChecked(C_SoundHandler::getInstance()->getEnableSounds());
-    show();
+    ui->input_connectionState->setText(C_RemoteInterfaceHandler::getInstance()->getClient()->isConnected() ? QString(TXT_CONNECTED) : QString(TXT_DISCONNECTED));
+    ui->input_connectionState->setStyleSheet(C_RemoteInterfaceHandler::getInstance()->getClient()->isConnected() ? CLR_CONNECTED : CLR_DISCONNECTED);
 
     connect(ui->input_ip, &QLineEdit::textChanged, C_RemoteInterfaceHandler::getInstance()->getClient(), &C_ClientTcp::onSetIP);
     connect(ui->input_port, &QSpinBox::textChanged, C_RemoteInterfaceHandler::getInstance()->getClient(), &C_ClientTcp::onSetPort);
@@ -102,6 +106,10 @@ W_ScreenSettings::W_ScreenSettings(QWidget *parent)
     connect(ui->input_name, &QLineEdit::textChanged, C_RemoteInterfaceHandler::getInstance()->getClient(), &C_ClientTcp::onSetName);
     connect(ui->input_music, &QCheckBox::toggled, C_SoundHandler::getInstance(), &C_SoundHandler::onEnableMusic);
     connect(ui->input_sounds, &QCheckBox::toggled, C_SoundHandler::getInstance(), &C_SoundHandler::onEnableSounds);
+    connect(C_RemoteInterfaceHandler::getInstance(), &C_RemoteInterfaceHandler::sig_connected, this, [&](){ ui->input_connectionState->setStyleSheet(CLR_CONNECTED); ui->input_connectionState->setText(QString(TXT_CONNECTED)); });
+    connect(C_RemoteInterfaceHandler::getInstance(), &C_RemoteInterfaceHandler::sig_disconnected, this, [&](){ ui->input_connectionState->setStyleSheet(CLR_DISCONNECTED); ui->input_connectionState->setText(QString(TXT_DISCONNECTED)); });
+
+    show();
 }
 
 W_ScreenSettings::~W_ScreenSettings()
