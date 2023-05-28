@@ -6,7 +6,7 @@
 <li>Date : 01/04/2023</li>
 </ul>
 
-<img src="./SV_GAME/Src/Resources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">
+<img src="./Game/Src/Resources/Secret_Voldemort_Cover.png" alt="Logo" width="200" height="300">
 
 ## Introduction
 
